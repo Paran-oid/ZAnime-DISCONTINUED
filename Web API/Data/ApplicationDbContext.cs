@@ -1,9 +1,12 @@
 ﻿using Elfie.Serialization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Shared.Models.Core;
 using Shared.Models.Main;
+using System;
 using System.Drawing;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Shared.Data
 {
@@ -11,14 +14,6 @@ namespace Shared.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {          
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string connectionString = "Data Source = PARANOID\\SQLEXPRESS; Initial Catalog = Zanime; Integrated Security = True; Trust Server Certificate = True";
-                optionsBuilder.UseSqlServer(connectionString);
-            }
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Anime> Animes { get; set; }

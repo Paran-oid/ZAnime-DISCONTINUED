@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Shared.Models.Core;
 
+
 namespace ZAnime.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
