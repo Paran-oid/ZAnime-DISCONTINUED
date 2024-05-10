@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 using Shared.Models.Main;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Models.Core
 {
-    public class User : IdentityApplicationUser
+    public class User : IdentityUser
     {
         public string? Fname { get; set; }
         public string? Lname { get; set; }
