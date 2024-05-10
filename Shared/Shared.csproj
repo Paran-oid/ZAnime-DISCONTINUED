@@ -20,10 +20,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Models\Core\" />
 	</ItemGroup>	
 	
 </Project>
