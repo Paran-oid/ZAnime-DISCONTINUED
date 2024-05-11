@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAnime", "ZAnime\ZAnime.csproj", "{CA0275BA-C819-47D8-96ED-6E9CEC10840C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zanime.Server", "ZAnime\ZAnime.Server\Zanime.Server.csproj", "{3556158F-22A4-4857-8DEA-784073EE18F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web API", "Web API\Web API.csproj", "{E2D56653-1AB6-4486-9D47-7C725ED1E833}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Zanime.client", "ZAnime\zanime.client\Zanime.client.esproj", "{1AB79A89-61F9-4F07-B644-65B330AA9E9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CA0275BA-C819-47D8-96ED-6E9CEC10840C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA0275BA-C819-47D8-96ED-6E9CEC10840C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA0275BA-C819-47D8-96ED-6E9CEC10840C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA0275BA-C819-47D8-96ED-6E9CEC10840C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2D56653-1AB6-4486-9D47-7C725ED1E833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2D56653-1AB6-4486-9D47-7C725ED1E833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2D56653-1AB6-4486-9D47-7C725ED1E833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2D56653-1AB6-4486-9D47-7C725ED1E833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3556158F-22A4-4857-8DEA-784073EE18F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3556158F-22A4-4857-8DEA-784073EE18F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3556158F-22A4-4857-8DEA-784073EE18F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3556158F-22A4-4857-8DEA-784073EE18F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

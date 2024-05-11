@@ -1,0 +1,6 @@
+@ZAnime.Server_HostAddress = http://localhost:5135
+
+GET {{ZAnime.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
