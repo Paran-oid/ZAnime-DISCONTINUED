@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
-using Shared.Models.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zanime.Server.Models.Main;
 
-namespace Shared.Models.Core
+namespace Zanime.Server.Models.Core
 {
     public class User : IdentityUser
     {

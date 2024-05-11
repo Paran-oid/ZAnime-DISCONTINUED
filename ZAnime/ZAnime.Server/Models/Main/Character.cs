@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Models.Main
+namespace Zanime.Server.Models.Main
 {
     public class Character
     {
@@ -16,7 +16,6 @@ namespace Shared.Models.Main
         public string Bio { get; set; }
         public int Likes { get; set; } = 0;
         public int Dislikes { get; set; } = 0;
-
 
         //One anime character can have many actors or can even not have one
         public List<Actor>? Actors { get; set; }

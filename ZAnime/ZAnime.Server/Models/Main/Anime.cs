@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Models.Main
+namespace Zanime.Server.Models.Main
 {
     public class Anime
     {
@@ -19,10 +19,8 @@ namespace Shared.Models.Main
         public string Description { get; set; }
         public float Rating { get; set; }
 
-
         public List<Character> Characters { get; set; }
         public List<Actor> Actors { get; set; }
         public List<Comment>? Comments { get; set; }
-
     }
 }
