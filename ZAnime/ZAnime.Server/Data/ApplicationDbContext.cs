@@ -11,7 +11,7 @@ using Zanime.Server.Models.Main.DTO.Character_Model;
 
 namespace Zanime.Server.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

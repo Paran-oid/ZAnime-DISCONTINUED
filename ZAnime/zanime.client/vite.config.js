@@ -42,11 +42,8 @@ export default defineConfig({
         }
     },
     server: {
+        //THIS IS WHERE TO ADD ROUTES APPARENTLY
         proxy: {
-            '^/weatherforecast': {
-                target,
-                secure: false
-            }
         },
         port: 5173,
         https: {
