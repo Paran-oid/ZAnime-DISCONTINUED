@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shared.Data;
+using Zanime.Server.Data;
 
 #nullable disable
 
-namespace Web_API.Migrations
+namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240510213328_initial")]
-    partial class initial
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,12 +191,10 @@ namespace Web_API.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -236,12 +231,10 @@ namespace Web_API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -251,7 +244,7 @@ namespace Web_API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Actor", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Actor", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -294,7 +287,7 @@ namespace Web_API.Migrations
                     b.ToTable("Actors");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Anime", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Anime", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -340,7 +333,7 @@ namespace Web_API.Migrations
                     b.ToTable("Animes");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Character", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Character", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -383,7 +376,7 @@ namespace Web_API.Migrations
                     b.ToTable("Characters");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Comment", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Comment", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -424,7 +417,7 @@ namespace Web_API.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Shared.Models.Core.User", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Core.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -443,13 +436,13 @@ namespace Web_API.Migrations
 
             modelBuilder.Entity("ActorCharacter", b =>
                 {
-                    b.HasOne("Shared.Models.Main.Actor", null)
+                    b.HasOne("Zanime.Server.Models.Main.Actor", null)
                         .WithMany()
                         .HasForeignKey("ActorsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Models.Main.Character", null)
+                    b.HasOne("Zanime.Server.Models.Main.Character", null)
                         .WithMany()
                         .HasForeignKey("CharactersID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -507,34 +500,34 @@ namespace Web_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Actor", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Actor", b =>
                 {
-                    b.HasOne("Shared.Models.Main.Anime", null)
+                    b.HasOne("Zanime.Server.Models.Main.Anime", null)
                         .WithMany("Actors")
                         .HasForeignKey("AnimeID");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Character", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Character", b =>
                 {
-                    b.HasOne("Shared.Models.Main.Anime", null)
+                    b.HasOne("Zanime.Server.Models.Main.Anime", null)
                         .WithMany("Characters")
                         .HasForeignKey("AnimeID");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Comment", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Comment", b =>
                 {
-                    b.HasOne("Shared.Models.Main.Anime", null)
+                    b.HasOne("Zanime.Server.Models.Main.Anime", null)
                         .WithMany("Comments")
                         .HasForeignKey("AnimeID");
 
-                    b.HasOne("Shared.Models.Core.User", "User")
+                    b.HasOne("Zanime.Server.Models.Core.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Shared.Models.Main.Anime", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Main.Anime", b =>
                 {
                     b.Navigation("Actors");
 
@@ -543,7 +536,7 @@ namespace Web_API.Migrations
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("Shared.Models.Core.User", b =>
+            modelBuilder.Entity("Zanime.Server.Models.Core.User", b =>
                 {
                     b.Navigation("Comments");
                 });

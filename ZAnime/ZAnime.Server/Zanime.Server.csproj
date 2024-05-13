@@ -37,4 +37,9 @@
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Models\Main\DTO\Anime Model\" />
+  </ItemGroup>
+
 </Project>

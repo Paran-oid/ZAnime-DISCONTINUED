@@ -2,19 +2,21 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Shared.Models.Core;
-using Shared.Models.Main;
+using Zanime.Server.Models.Core;
+using Zanime.Server.Models.Main;
 using System;
 using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
+using Zanime.Server.Models.Main.DTO.Character_Model;
 
-namespace Shared.Data
+namespace Zanime.Server.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {          
+        {
         }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Anime> Animes { get; set; }
         public DbSet<Character> Characters { get; set; }

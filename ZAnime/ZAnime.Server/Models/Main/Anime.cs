@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zanime.Server.Models.Main.DTO.Character_Model;
 
 namespace Zanime.Server.Models.Main
 {

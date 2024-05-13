@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Shared.Data;
+using Zanime.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

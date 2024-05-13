@@ -10,16 +10,9 @@ namespace Zanime.Server.Models.Main
     public class Comment
     {
         public int ID { get; set; }
-
-        //This will be referenced from the user's profile picture
-        public string ProfilePicturePath { get; set; }
-
-        //This will be referenced from the user's username
-        public string Username { get; set; }
-
         public string Content { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
+        public int Upvotes { get; set; } = 0;
+        public int Downvotes { get; set; } = 0;
 
         public User User { get; set; }
     }
