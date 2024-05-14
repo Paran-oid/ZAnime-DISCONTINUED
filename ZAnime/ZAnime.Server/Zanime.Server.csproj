@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
     <Folder Include="Models\Main\DTO\Anime Model\" />
   </ItemGroup>
 
