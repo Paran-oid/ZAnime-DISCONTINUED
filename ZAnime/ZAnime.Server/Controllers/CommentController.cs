@@ -19,14 +19,22 @@ namespace Zanime.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CommentVMDisplay>>> GetAll()
         {
             var comments = await _context.Comments.ToListAsync();
-            return Ok(comments);
+
+            var result = comments.Select(c => new CommentVMDisplay
+            {
+                ID = c.ID,
+                Content = c.Content,
+                Likes = c.Likes
+            }).ToList();
+
+            return Ok(result);
         }
 
         [HttpGet("{ID}")]
-        public async Task<ActionResult<Comment>> Get(int ID)
+        public async Task<ActionResult<CommentVMDisplay>> Get(int ID)
         {
             var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
             if (comment == null)
@@ -36,10 +44,40 @@ namespace Zanime.Server.Controllers
             return Ok(comment);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<string>> Post(CommentVM model, string Username)
+        [HttpGet("{ID}")]
+        public async Task<ActionResult> LikeComment(int ID)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == Username);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            comment.LikeComment();
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("{ID}")]
+        public async Task<ActionResult> DislikeComment(int ID)
+        {
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            comment.DislikeComment();
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost("{ID}")]
+        public async Task<ActionResult<string>> Post(CommentVM model, string ID)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == ID);
 
             if (user == null)
             {
@@ -49,15 +87,14 @@ namespace Zanime.Server.Controllers
             Comment comment = new Comment
             {
                 Content = model.Content,
-                Upvotes = 0,
-                Downvotes = 0,
+                Likes = 0,
                 User = user
             };
 
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return Ok($"{comment.ID} was added by {Username}s ");
+            return Ok($"{user.UserName} added a comment");
         }
 
         [HttpPut("{ID}")]

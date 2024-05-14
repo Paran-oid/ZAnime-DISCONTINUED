@@ -11,9 +11,17 @@ namespace Zanime.Server.Models.Main
     {
         public int ID { get; set; }
         public string Content { get; set; }
-        public int Upvotes { get; set; } = 0;
-        public int Downvotes { get; set; } = 0;
-
+        public int Likes { get; set; } = 0;
         public User User { get; set; }
+
+        public void LikeComment()
+        {
+            Likes++;
+        }
+
+        public void DislikeComment()
+        {
+            Likes--;
+        }
     }
 }
