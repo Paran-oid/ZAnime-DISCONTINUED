@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main;
+using Microsoft.AspNetCore;
 using System;
 using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
 using Zanime.Server.Models.Main.DTO.Character_Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace Zanime.Server.Data
 {
@@ -20,8 +22,8 @@ namespace Zanime.Server.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>().HasData(
-                new User { Id = "1", UserName = "user1@example.com", FirstName = "John", LastName = "Doe", ProfilePicturePath = "/images/profile1.jpg" },
-                new User { Id = "2", UserName = "user2@example.com", FirstName = "Jane", LastName = "Smith", ProfilePicturePath = "/images/profile2.jpg" }
+                new User { Id = "1", UserName = "user1@example.com", Fname = "John", Lname = "Doe", ProfilePicturePath = "/images/profile1.jpg" },
+                new User { Id = "2", UserName = "user2@example.com", Fname = "Jane", Lname = "Smith", ProfilePicturePath = "/images/profile2.jpg" }
             );
 
             builder.Entity<Actor>().HasData(
@@ -30,8 +32,8 @@ namespace Zanime.Server.Data
             );
 
             builder.Entity<Anime>().HasData(
-                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), Genre = "Action, Drama, Fantasy", MainPicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures." },
-                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), Genre = "Action, Comedy, Superhero", MainPicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself." }
+                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), Genre = "Action, Drama, Fantasy", MainPicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.", BackgroundPath = "none", PicturesPath = "none" },
+                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), Genre = "Action, Comedy, Superhero", MainPicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.", BackgroundPath = "none", PicturesPath = "none" }
             );
 
             builder.Entity<Character>().HasData(
@@ -40,8 +42,8 @@ namespace Zanime.Server.Data
             );
 
             builder.Entity<Comment>().HasData(
-                new Comment { ID = 1, Content = "Great performance by Tom Hanks in Forrest Gump!", Likes = 10, UserID = 1 },
-                new Comment { ID = 2, Content = "Attack on Titan is an intense and gripping anime.", Likes = 20, UserID = 2 }
+                new Comment { ID = 1, Content = "Great performance by Tom Hanks in Forrest Gump!", Likes = 10, UserId = "1" },
+                new Comment { ID = 2, Content = "Attack on Titan is an intense and gripping anime.", Likes = 20, UserId = "2" }
             );
 
             base.OnModelCreating(builder);
