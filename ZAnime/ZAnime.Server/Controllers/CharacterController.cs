@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
+using Zanime.Server.Models.Main.DTO.Actor_Model;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 
 namespace Zanime.Server.Controllers
@@ -34,6 +35,26 @@ namespace Zanime.Server.Controllers
                 return NotFound("No character was found");
             }
             return Ok(character);
+        }
+
+        [HttpGet("{ID}")]
+        public async Task<ActionResult<List<Actor>>> GetActors(int ID)
+        {
+            var character = await _context.Characters
+                .Include(c => c.Actors)
+                .FirstOrDefaultAsync(c => c.ID == ID);
+
+
+        List<ActorVM> actors = character.Actors.Select(a => new ActorVM
+            {
+                Name = a.Name,
+                Age = a.Age,
+                Gender = a.Gender,
+                PicturePath = a.PicturePath,
+                Bio = a.Bio,
+            }).ToList();
+
+            return Ok(actors);
         }
 
         [HttpPost]
@@ -81,6 +102,37 @@ namespace Zanime.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Character was modified");
+        }
+
+        [HttpPut("{ID}")]
+        public async Task<ActionResult<string>> CreateActorToCharacter(int ID, ActorVM model)
+        {
+            var character = await _context.Characters
+                .Include(c => c.Actors)
+                .FirstOrDefaultAsync(c => c.ID == ID);
+
+            if (character == null)
+            {
+                return NotFound("No character was found");
+            }
+
+            Actor actor = new Actor
+            {
+                Name = model.Name,
+                Age = model.Age,
+                Gender = model.Gender,
+                PicturePath = model.PicturePath,
+                Bio = model.Bio,
+                Likes = 0,
+                Dislikes = 0,
+            };
+
+            await _context.Actors.AddAsync(actor);
+            character.Actors.Add(actor);
+            _context.Characters.Update(character);
+            await _context.SaveChangesAsync();
+
+            return Ok($"{actor.Name} was created for {character.Name}");
         }
 
         [HttpDelete("{ID}")]
