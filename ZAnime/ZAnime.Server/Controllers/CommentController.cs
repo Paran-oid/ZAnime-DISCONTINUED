@@ -27,7 +27,8 @@ namespace Zanime.Server.Controllers
             {
                 ID = c.ID,
                 Content = c.Content,
-                Likes = c.Likes
+                Likes = c.Likes,
+                UserId = c.UserId
             }).ToList();
 
             return Ok(result);
