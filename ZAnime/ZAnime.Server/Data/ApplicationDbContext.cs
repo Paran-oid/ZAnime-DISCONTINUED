@@ -32,8 +32,8 @@ namespace Zanime.Server.Data
             );
 
             builder.Entity<Anime>().HasData(
-                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), Genre = "Action, Drama, Fantasy", MainPicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.", BackgroundPath = "none", PicturesPath = "none" },
-                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), Genre = "Action, Comedy, Superhero", MainPicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.", BackgroundPath = "none", PicturesPath = "none" }
+                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), Genre = "Action, Drama, Fantasy", PicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.", BackgroundPath = "none" },
+                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), Genre = "Action, Comedy, Superhero", PicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.", BackgroundPath = "none" }
             );
 
             builder.Entity<Character>().HasData(

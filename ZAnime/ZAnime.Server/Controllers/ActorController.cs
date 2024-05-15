@@ -44,7 +44,6 @@ namespace Zanime.Server.Controllers
                 .Include(c => c.Characters)
                 .FirstOrDefaultAsync(c => c.ID == ID);
 
-
             List<CharacterVM> characters = actor.Characters.Select(a => new CharacterVM
             {
                 Name = a.Name,
@@ -102,6 +101,27 @@ namespace Zanime.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("actor was modified");
+        }
+
+        [HttpPut("{ActorID},{CharacterID}")]
+        public async Task<ActionResult<string>> AddCharacterToActor(int ActorID, int CharacterID)
+        {
+            var actor = await _context.Actors.FirstOrDefaultAsync(a => a.ID == ActorID);
+            if (actor == null)
+            {
+                return NotFound("no actor was found");
+            }
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            if (character == null)
+            {
+                return NotFound("no character was found");
+            }
+            actor.Characters.Add(character);
+
+            _context.Actors.Update(actor);
+            await _context.SaveChangesAsync();
+
+            return Ok($"{character.Name} was added to {actor.Name}");
         }
 
         [HttpPut("{ID}")]

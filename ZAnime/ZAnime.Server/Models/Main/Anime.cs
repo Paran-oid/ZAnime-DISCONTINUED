@@ -14,9 +14,8 @@ namespace Zanime.Server.Models.Main
         public DateOnly ReleaseDate { get; set; }
         public DateOnly? EndDate { get; set; } = null;
         public string Genre { get; set; }
-        public string MainPicturePath { get; set; }
+        public string PicturePath { get; set; }
         public string BackgroundPath { get; set; }
-        public string PicturesPath { get; set; }
         public string Description { get; set; }
         public float Rating { get; set; }
 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 using Zanime.Server.Models.Main;
+using Microsoft.EntityFrameworkCore;
+using Zanime.Server.Models.Main.DTO.Anime_Model;
 
 namespace Zanime.Server.Controllers
 {
@@ -10,90 +12,93 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class AnimeController : ControllerBase
     {
-        //private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        //public CharacterController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
+        public AnimeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Character>>> GetAll()
-        //{
-        //    var characters = await _context.Characters.ToListAsync();
-        //    return Ok(characters);
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Anime>>> GetAll()
+        {
+            var animes = await _context.Animes.ToListAsync();
+            return Ok(animes);
+        }
 
-        //[HttpGet("{ID}")]
-        //public async Task<ActionResult<Character>> Get(int ID)
-        //{
-        //    var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
-        //    if (character == null)
-        //    {
-        //        return NotFound("No character was found");
-        //    }
-        //    return Ok(character);
-        //}
+        [HttpGet("{ID}")]
+        public async Task<ActionResult<Anime>> Get(int ID)
+        {
+            var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == ID);
+            if (anime == null)
+            {
+                return NotFound("No character was found");
+            }
+            return Ok(anime);
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<string>> Post(CharacterVM model)
-        //{
-        //    Character character = new Character
-        //    {
-        //        Name = model.Name,
-        //        Age = model.Age,
-        //        Gender = model.Gender,
-        //        PicturePath = model.PicturePath,
-        //        Bio = model.Bio,
-        //        Likes = 0,
-        //        Dislikes = 0,
-        //        Actors = null
-        //    };
+        [HttpPost]
+        public async Task<ActionResult<string>> Post(AnimeVM model)
+        {
+            Anime anime = new Anime
+            {
+                Title = model.Title,
+                ReleaseDate = model.ReleaseDate,
+                EndDate = model.EndDate,
+                Genre = model.Genre,
+                PicturePath = model.PicturePath,
+                BackgroundPath = model.BackgroundPath,
+                Description = model.Description,
+                Rating = model.Rating
+            };
 
-        //    if (await _context.Characters.AnyAsync(c => c.Name == character.Name))
-        //    {
-        //        return Conflict("Error");
-        //    }
+            if (await _context.Animes.AnyAsync(a => a.Title == anime.Title))
+            {
+                return Conflict("Anime with this title already exists");
+            }
 
-        //    await _context.Characters.AddAsync(character);
-        //    await _context.SaveChangesAsync();
+            await _context.Animes.AddAsync(anime);
+            await _context.SaveChangesAsync();
 
-        //    return Ok($"{character.Name} was added ");
-        //}
+            return Ok($"{anime.Title} was added ");
+        }
 
-        //[HttpPut("{ID}")]
-        //public async Task<ActionResult<string>> Put(CharacterVM model, int ID)
-        //{
-        //    var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
-        //    if (character == null)
-        //    {
-        //        return NotFound("No character was found");
-        //    }
+        [HttpPut("{ID}")]
+        public async Task<ActionResult<string>> Put(AnimeVM model, int ID)
+        {
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == ID);
+            if (anime == null)
+            {
+                return NotFound("No anime was found");
+            }
 
-        //    character.Name = model.Name;
-        //    character.Age = model.Age;
-        //    character.Gender = model.Gender;
-        //    character.PicturePath = model.PicturePath;
-        //    character.Bio = model.Bio;
+            anime.Title = model.Title;
+            anime.ReleaseDate = model.ReleaseDate;
+            anime.EndDate = model.EndDate;
+            anime.Genre = model.Genre;
+            anime.PicturePath = model.PicturePath;
+            anime.BackgroundPath = model.BackgroundPath;
+            anime.Description = model.Description;
+            anime.Rating = model.Rating;
 
-        //    _context.Characters.Update(character);
-        //    await _context.SaveChangesAsync();
+            _context.Animes.Update(anime);
+            await _context.SaveChangesAsync();
 
-        //    return Ok("Character was modified");
-        //}
+            return Ok("Anime was modified");
+        }
 
-        //[HttpDelete("{ID}")]
-        //public async Task<ActionResult<string>> Delete(int ID)
-        //{
-        //    var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
-        //    if (character == null)
-        //    {
-        //        return NotFound("No character was found");
-        //    }
-        //    _context.Characters.Remove(character);
-        //    await _context.SaveChangesAsync();
+        [HttpDelete("{ID}")]
+        public async Task<ActionResult<string>> Delete(int ID)
+        {
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == ID);
+            if (anime == null)
+            {
+                return NotFound("No anime was found");
+            }
+            _context.Animes.Remove(anime);
+            await _context.SaveChangesAsync();
 
-        //    return Ok("Character was Deleted");
-        //}
+            return Ok("Character was Deleted");
+        }
     }
 }
