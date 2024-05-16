@@ -41,17 +41,17 @@ namespace Zanime.Server.Controllers
         public async Task<ActionResult<List<Actor>>> GetActors(int ID)
         {
             var character = await _context.Characters
-                .Include(c => c.Actors)
+                .Include(c => c.ActorCharacters)
+                    .ThenInclude(ac => ac.Character)
                 .FirstOrDefaultAsync(c => c.ID == ID);
 
-
-        List<ActorVM> actors = character.Actors.Select(a => new ActorVM
+            var actors = character.ActorCharacters.Select(ac => new ActorVM
             {
-                Name = a.Name,
-                Age = a.Age,
-                Gender = a.Gender,
-                PicturePath = a.PicturePath,
-                Bio = a.Bio,
+                Name = ac.Actor.Name,
+                Age = ac.Actor.Age,
+                Bio = ac.Actor.Bio,
+                Gender = ac.Actor.Gender,
+                PicturePath = ac.Actor.PicturePath
             }).ToList();
 
             return Ok(actors);
@@ -69,7 +69,6 @@ namespace Zanime.Server.Controllers
                 Bio = model.Bio,
                 Likes = 0,
                 Dislikes = 0,
-                Actors = null
             };
 
             if (await _context.Characters.AnyAsync(c => c.Name == character.Name))
@@ -98,41 +97,9 @@ namespace Zanime.Server.Controllers
             character.PicturePath = model.PicturePath;
             character.Bio = model.Bio;
 
-            _context.Characters.Update(character);
             await _context.SaveChangesAsync();
 
             return Ok("Character was modified");
-        }
-
-        [HttpPut("{ID}")]
-        public async Task<ActionResult<string>> CreateActorToCharacter(int ID, ActorVM model)
-        {
-            var character = await _context.Characters
-                .Include(c => c.Actors)
-                .FirstOrDefaultAsync(c => c.ID == ID);
-
-            if (character == null)
-            {
-                return NotFound("No character was found");
-            }
-
-            Actor actor = new Actor
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
-
-            await _context.Actors.AddAsync(actor);
-            character.Actors.Add(actor);
-            _context.Characters.Update(character);
-            await _context.SaveChangesAsync();
-
-            return Ok($"{actor.Name} was created for {character.Name}");
         }
 
         [HttpDelete("{ID}")]

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zanime.Server.Models.Main.DTO.Character_Model;
-
-namespace Zanime.Server.Models.Main
+﻿namespace Zanime.Server.Models.Main
 {
     public class Actor
     {
@@ -19,6 +12,6 @@ namespace Zanime.Server.Models.Main
         public int Dislikes { get; set; } = 0;
 
         //One autor can have many anime characters he voices
-        public List<Character> Characters { get; set; }
+        public ICollection<ActorCharacter>? ActorCharacters { get; set; }
     }
 }

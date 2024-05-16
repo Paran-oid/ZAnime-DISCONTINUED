@@ -21,6 +21,23 @@ namespace Zanime.Server.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //SETTING RELATIONSHIPS
+            builder.Entity<ActorCharacter>()
+                .HasKey(ac => new { ac.ActorID, ac.CharacterID });
+
+            //An Actor can be related to many ActorCharacter entries.
+            builder.Entity<ActorCharacter>()
+                .HasOne(ac => ac.Actor)
+                .WithMany(ac => ac.ActorCharacters)
+                .HasForeignKey(ac => ac.ActorID);
+
+            //A Character can be related to many ActorCharacter entries.
+            builder.Entity<ActorCharacter>()
+                .HasOne(ac => ac.Character)
+                .WithMany(ac => ac.ActorCharacters)
+                .HasForeignKey(ac => ac.CharacterID);
+
+            //DATA SEEDING
             builder.Entity<User>().HasData(
                 new User { Id = "1", UserName = "user1@example.com", Fname = "John", Lname = "Doe", ProfilePicturePath = "/images/profile1.jpg" },
                 new User { Id = "2", UserName = "user2@example.com", Fname = "Jane", Lname = "Smith", ProfilePicturePath = "/images/profile2.jpg" }
@@ -53,6 +70,7 @@ namespace Zanime.Server.Data
         public DbSet<Anime> Animes { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Actor> Actors { get; set; }
+        public DbSet<ActorCharacter> ActorCharacters { get; set; }
         public DbSet<Comment> Comments { get; set; }
     }
 }

@@ -18,6 +18,6 @@ namespace Zanime.Server.Models.Main
         public int Dislikes { get; set; } = 0;
 
         //One anime character can have many actors or can even not have one
-        public List<Actor>? Actors { get; set; }
+        public ICollection<ActorCharacter>? ActorCharacters { get; set; }
     }
 }

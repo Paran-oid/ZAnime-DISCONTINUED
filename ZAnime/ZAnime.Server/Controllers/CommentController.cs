@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
-using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
 
 namespace Zanime.Server.Controllers
@@ -109,7 +108,6 @@ namespace Zanime.Server.Controllers
 
             comment.Content = model.Content;
 
-            _context.Comments.Update(comment);
             await _context.SaveChangesAsync();
 
             return Ok("comment was modified");

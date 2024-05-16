@@ -1,6 +1,4 @@
-﻿using Zanime.Server.Models.Core;
-
-namespace Zanime.Server.Models.Main.DTO.Comment_Model
+﻿namespace Zanime.Server.Models.Main.DTO.Comment_Model
 {
     public class CommentVM
     {
