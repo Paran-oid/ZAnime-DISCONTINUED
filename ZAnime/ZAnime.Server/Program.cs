@@ -13,6 +13,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
 );
+//Need them to be able to fetch web api to react
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:5173")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 //We add authorization
 //Then we add identityAPIEndpoints
@@ -20,13 +31,14 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllers().AddJsonOptions(x =>
-   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+//builder.Services.AddControllers().AddJsonOptions(x =>
+//   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseCors("AllowOrigin");
 app.MapIdentityApi<User>();
 
 //We created a minimal API which logs out the user and gets the email entered
