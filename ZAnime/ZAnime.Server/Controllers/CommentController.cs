@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
 
@@ -11,10 +13,12 @@ namespace Zanime.Server.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _usermanager;
 
-        public CommentController(ApplicationDbContext context)
+        public CommentController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _usermanager = userManager;
         }
 
         [HttpGet]
@@ -45,33 +49,21 @@ namespace Zanime.Server.Controllers
         }
 
         [HttpGet("{ID}")]
-        public async Task<ActionResult> LikeComment(int ID)
+        public async Task<ActionResult<CommentVM>> ShowUserComments(string ID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
-            if (comment == null)
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == ID);
+            if (user == null)
             {
-                return NotFound();
+                return NotFound("No user was found");
             }
-            comment.LikeComment();
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpGet("{ID}")]
-        public async Task<ActionResult> DislikeComment(int ID)
-        {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
-
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            comment.DislikeComment();
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            var comments = _context.Comments
+                .Where(c => c.UserId == ID)
+                .Select(c => new CommentVM
+                {
+                    Content = c.Content
+                })
+                .ToList();
+            return Ok(comments);
         }
 
         [HttpPost("{ID}")]
@@ -111,6 +103,36 @@ namespace Zanime.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("comment was modified");
+        }
+
+        [HttpPut("{ID}")]
+        public async Task<ActionResult> LikeComment(int ID)
+        {
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            comment.LikeComment();
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut("{ID}")]
+        public async Task<ActionResult> DislikeComment(int ID)
+        {
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            comment.DislikeComment();
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpDelete("{ID}")]

@@ -22,6 +22,7 @@ namespace Zanime.Server.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //SETTING RELATIONSHIPS
+            //ACTORS AND CHARACTERS
             builder.Entity<ActorCharacter>()
                 .HasKey(ac => new { ac.ActorID, ac.CharacterID });
 
@@ -37,6 +38,7 @@ namespace Zanime.Server.Data
                 .WithMany(ac => ac.ActorCharacters)
                 .HasForeignKey(ac => ac.CharacterID);
 
+                
             //DATA SEEDING
             builder.Entity<User>().HasData(
                 new User { Id = "1", UserName = "user1@example.com", Fname = "John", Lname = "Doe", ProfilePicturePath = "/images/profile1.jpg" },

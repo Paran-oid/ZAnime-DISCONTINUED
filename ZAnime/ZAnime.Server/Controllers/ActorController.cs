@@ -41,20 +41,29 @@ namespace Zanime.Server.Controllers
         public async Task<ActionResult<List<Actor>>> GetCharacters(int ID)
         {
             var actor = await _context.Actors
-                .Include(a => a.ActorCharacters)
+                    .Include(a => a.ActorCharacters)
                     .ThenInclude(ac => ac.Character)
-                .FirstOrDefaultAsync(c => c.ID == ID);
+                    .FirstOrDefaultAsync(a => a.ID == ID);
 
-            var characters = actor.ActorCharacters.Select(ac => new CharacterVM
+            if (actor == null)
             {
-                Name = ac.Character.Name,
-                Age = ac.Character.Age,
-                Bio = ac.Character.Bio,
-                Gender = ac.Character.Gender,
-                PicturePath = ac.Character.PicturePath
-            }).ToList();
+                return NotFound("No actor was found");
+            }
 
-            return Ok(characters);
+            if (actor.ActorCharacters.Any())
+            {
+                var characters = actor.ActorCharacters.Select(ac => new CharacterVM
+                {
+                    Name = ac.Character.Name,
+                    Age = ac.Character.Age,
+                    Bio = ac.Character.Bio,
+                    Gender = ac.Character.Gender,
+                    PicturePath = ac.Character.PicturePath
+                }).ToList();
+
+                return Ok(characters);
+            }
+            return Ok("No characters were found");
         }
 
         [HttpPost]

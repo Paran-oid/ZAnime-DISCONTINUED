@@ -42,19 +42,22 @@ namespace Zanime.Server.Controllers
         {
             var character = await _context.Characters
                 .Include(c => c.ActorCharacters)
-                    .ThenInclude(ac => ac.Character)
+                    .ThenInclude(ac => ac.Actor)
                 .FirstOrDefaultAsync(c => c.ID == ID);
 
-            var actors = character.ActorCharacters.Select(ac => new ActorVM
+            if (character.ActorCharacters.Any())
             {
-                Name = ac.Actor.Name,
-                Age = ac.Actor.Age,
-                Bio = ac.Actor.Bio,
-                Gender = ac.Actor.Gender,
-                PicturePath = ac.Actor.PicturePath
-            }).ToList();
-
-            return Ok(actors);
+                var actors = character.ActorCharacters.Select(ac => new ActorVM
+                {
+                    Name = ac.Actor.Name,
+                    Age = ac.Actor.Age,
+                    Bio = ac.Actor.Bio,
+                    Gender = ac.Actor.Gender,
+                    PicturePath = ac.Actor.PicturePath
+                }).ToList();
+                return Ok(actors);
+            }
+            return Ok("No actors were found");
         }
 
         [HttpPost]
