@@ -20,7 +20,19 @@ namespace Zanime.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Anime>>> GetAll()
         {
-            var animes = await _context.Animes.ToListAsync();
+            var animes = await _context.Animes
+                .Select(a => new AnimeVM
+                {
+                    Title = a.Title,
+                    BackgroundPath = a.BackgroundPath,
+                    Description = a.Description,
+                    EndDate = a.EndDate,
+                    Genre = a.Genre,
+                    PicturePath = a.PicturePath,
+                    Rating = a.Rating,
+                    ReleaseDate = a.ReleaseDate
+                })
+                .ToListAsync();
             return Ok(animes);
         }
 
@@ -30,7 +42,7 @@ namespace Zanime.Server.Controllers
             var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == ID);
             if (anime == null)
             {
-                return NotFound("No character was found");
+                return NotFound("No anime was found");
             }
             return Ok(anime);
         }
@@ -96,7 +108,7 @@ namespace Zanime.Server.Controllers
             _context.Animes.Remove(anime);
             await _context.SaveChangesAsync();
 
-            return Ok("Character was Deleted");
+            return Ok("Anime was Deleted");
         }
     }
 }
