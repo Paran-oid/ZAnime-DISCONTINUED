@@ -13,6 +13,7 @@
         public float Rating { get; set; }
 
         //MAKE MM RELATIONSHIP WITH ALL OF THESE DOWN BELOW WITH A FOLDER SPECIFICALLY FOR THEM AND ACTOR CHARACTER AND CHANGE THEIR NAMESPACES !!!
+        //QUICK TEST
         public List<Character> Characters { get; set; }
 
         public List<Actor> Actors { get; set; }
