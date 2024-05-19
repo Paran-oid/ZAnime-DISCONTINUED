@@ -1,4 +1,4 @@
-﻿namespace Zanime.Server.Models.Main
+﻿namespace Zanime.Server.Models.Main.Relationships
 {
     public class ActorCharacter
     {

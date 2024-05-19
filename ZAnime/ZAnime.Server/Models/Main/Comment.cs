@@ -1,4 +1,5 @@
 ﻿using Zanime.Server.Models.Core;
+using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Models.Main
 {
@@ -7,8 +8,10 @@ namespace Zanime.Server.Models.Main
         public int ID { get; set; }
         public string Content { get; set; }
         public int Likes { get; set; } = 0;
+
         public string UserId { get; set; }
         public User User { get; set; }
+        public ICollection<AnimeComment> AnimeComment { get; set; }
 
         public void LikeComment()
         {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zanime.Server.Data;
 
@@ -11,9 +12,11 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240519162441_Anime&OtherRelationships")]
+    partial class AnimeOtherRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,14 +237,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "609546ee-c078-4689-95eb-1dd588a82f38",
+                            ConcurrencyStamp = "48663b57-b01a-4e2e-8d87-11291e74803d",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "83cc9934-6529-4cda-8510-c8be9713d76f",
+                            SecurityStamp = "dab1c819-3e60-408b-a839-e61bc48936b4",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -249,14 +252,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9dc7c191-8c25-4f9e-94a3-8d69bfcbb819",
+                            ConcurrencyStamp = "e5c5de51-b1e3-43d3-834b-5e2645dd77c7",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "c8a39f6c-2fd9-4832-b6b6-249ad53e7a95",
+                            SecurityStamp = "88684463-c3b7-4c6e-bb03-c6390d087e26",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -521,7 +524,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesActors");
+                    b.ToTable("AnimeActor");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
@@ -536,7 +539,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesCharacters");
+                    b.ToTable("AnimeCharacter");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeComment", b =>
@@ -551,7 +554,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesComments");
+                    b.ToTable("AnimeComment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

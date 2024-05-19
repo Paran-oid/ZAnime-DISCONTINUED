@@ -1,4 +1,6 @@
-﻿namespace Zanime.Server.Models.Main
+﻿using Zanime.Server.Models.Main.Relationships;
+
+namespace Zanime.Server.Models.Main
 {
     public class Anime
     {
@@ -12,11 +14,10 @@
         public string Description { get; set; }
         public float Rating { get; set; }
 
-        //MAKE MM RELATIONSHIP WITH ALL OF THESE DOWN BELOW WITH A FOLDER SPECIFICALLY FOR THEM AND ACTOR CHARACTER AND CHANGE THEIR NAMESPACES !!!
-        //QUICK TESTT
-        public List<Character> Characters { get; set; }
+        public ICollection<AnimeActor> AnimeActor { get; set; }
 
-        public List<Actor> Actors { get; set; }
-        public List<Comment>? Comments { get; set; }
+        public ICollection<AnimeCharacter> AnimeCharacter { get; set; }
+
+        public ICollection<AnimeComment> AnimeComment { get; set; }
     }
 }

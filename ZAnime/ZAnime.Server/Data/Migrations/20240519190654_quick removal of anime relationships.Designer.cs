@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zanime.Server.Data;
 
@@ -11,9 +12,11 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240519190654_quick removal of anime relationships")]
+    partial class quickremovalofanimerelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,14 +237,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "609546ee-c078-4689-95eb-1dd588a82f38",
+                            ConcurrencyStamp = "a85e5a59-cd54-44c2-bc35-817c36e24714",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "83cc9934-6529-4cda-8510-c8be9713d76f",
+                            SecurityStamp = "b9b74780-671a-425a-8a9d-798e03b09d84",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -249,14 +252,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9dc7c191-8c25-4f9e-94a3-8d69bfcbb819",
+                            ConcurrencyStamp = "8c3fe90e-4435-4b4f-9a47-b52723b447b5",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "c8a39f6c-2fd9-4832-b6b6-249ad53e7a95",
+                            SecurityStamp = "855f9a15-35b8-44ae-8a26-24ff0e18c67d",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -524,36 +527,6 @@ namespace Zanime.Server.Migrations
                     b.ToTable("AnimesActors");
                 });
 
-            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
-                {
-                    b.Property<int>("CharacterID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AnimeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CharacterID", "AnimeID");
-
-                    b.HasIndex("AnimeID");
-
-                    b.ToTable("AnimesCharacters");
-                });
-
-            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeComment", b =>
-                {
-                    b.Property<int>("CommentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AnimeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CommentID", "AnimeID");
-
-                    b.HasIndex("AnimeID");
-
-                    b.ToTable("AnimesComments");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -654,44 +627,6 @@ namespace Zanime.Server.Migrations
                     b.Navigation("Anime");
                 });
 
-            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
-                {
-                    b.HasOne("Zanime.Server.Models.Main.Anime", "Anime")
-                        .WithMany("AnimeCharacter")
-                        .HasForeignKey("AnimeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Zanime.Server.Models.Main.Character", "Character")
-                        .WithMany("AnimeCharacter")
-                        .HasForeignKey("CharacterID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Anime");
-
-                    b.Navigation("Character");
-                });
-
-            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeComment", b =>
-                {
-                    b.HasOne("Zanime.Server.Models.Main.Anime", "Anime")
-                        .WithMany("AnimeComment")
-                        .HasForeignKey("AnimeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Zanime.Server.Models.Main.Comment", "Comment")
-                        .WithMany("AnimeComment")
-                        .HasForeignKey("CommentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Anime");
-
-                    b.Navigation("Comment");
-                });
-
             modelBuilder.Entity("Zanime.Server.Models.Core.User", b =>
                 {
                     b.Navigation("Comments");
@@ -707,22 +642,11 @@ namespace Zanime.Server.Migrations
             modelBuilder.Entity("Zanime.Server.Models.Main.Anime", b =>
                 {
                     b.Navigation("AnimeActor");
-
-                    b.Navigation("AnimeCharacter");
-
-                    b.Navigation("AnimeComment");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Character", b =>
                 {
                     b.Navigation("ActorCharacters");
-
-                    b.Navigation("AnimeCharacter");
-                });
-
-            modelBuilder.Entity("Zanime.Server.Models.Main.Comment", b =>
-                {
-                    b.Navigation("AnimeComment");
                 });
 #pragma warning restore 612, 618
         }

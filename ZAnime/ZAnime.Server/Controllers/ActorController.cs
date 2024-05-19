@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
-using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 

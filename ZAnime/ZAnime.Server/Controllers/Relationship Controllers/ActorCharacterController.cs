@@ -1,19 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
+using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
-    public class ActorCharacters : ControllerBase
+    public class ActorCharacterController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public ActorCharacters(ApplicationDbContext context)
+        public ActorCharacterController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,7 +23,7 @@ namespace Zanime.Server.Controllers
         {
             var character = await _context.Characters
                 .Include(c => c.ActorCharacters)
-                    .ThenInclude(ac => ac.Actor)
+                .ThenInclude(ac => ac.Actor)
                 .FirstOrDefaultAsync(c => c.ID == CharacterID);
 
             if (character == null)
@@ -66,7 +66,7 @@ namespace Zanime.Server.Controllers
         {
             var actor = await _context.Actors
                 .Include(c => c.ActorCharacters)
-                    .ThenInclude(ac => ac.Character)
+                .ThenInclude(ac => ac.Character)
                 .FirstOrDefaultAsync(c => c.ID == ActorID);
 
             if (actor == null)
@@ -103,7 +103,7 @@ namespace Zanime.Server.Controllers
             return Ok($"{character.Name} was created for {actor.Name}");
         }
 
-        [HttpPut("{ActorID},{CharacterID}")]
+        [HttpPost("{ActorID},{CharacterID}")]
         public async Task<ActionResult<string>> AddActorToCharacter(int ActorID, int CharacterID)
         {
             var actor = await _context.Actors.FirstOrDefaultAsync(a => a.ID == ActorID);
@@ -130,6 +130,23 @@ namespace Zanime.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok($"{actor.Name} was added to {character.Name}");
+        }
+
+        [HttpDelete("{ActorID},{CharacterID}")]
+        public async Task<ActionResult> RemoveRelationship(int ActorID, int CharacterID)
+        {
+            var relationship = await _context.ActorCharacters.FirstOrDefaultAsync(ac => ac.ActorID == ActorID
+                                                                                  && ac.CharacterID == CharacterID);
+
+            if (relationship == null)
+            {
+                return NotFound("No relationship of this kind");
+            }
+
+            _context.ActorCharacters.Remove(relationship);
+            await _context.SaveChangesAsync();
+
+            return Ok("Relationship deleted successfully");
         }
     }
 }

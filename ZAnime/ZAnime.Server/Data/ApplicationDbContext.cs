@@ -10,6 +10,7 @@ using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 using Microsoft.AspNetCore.Identity;
+using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Data
 {
@@ -22,24 +23,69 @@ namespace Zanime.Server.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //SETTING RELATIONSHIPS
-            //ACTORS AND CHARACTERS
+
+            //ACTORS AND CHARACTERS M:M
+
             builder.Entity<ActorCharacter>()
                 .HasKey(ac => new { ac.ActorID, ac.CharacterID });
 
-            //An Actor can be related to many ActorCharacter entries.
             builder.Entity<ActorCharacter>()
                 .HasOne(ac => ac.Actor)
                 .WithMany(ac => ac.ActorCharacters)
                 .HasForeignKey(ac => ac.ActorID);
 
-            //A Character can be related to many ActorCharacter entries.
             builder.Entity<ActorCharacter>()
                 .HasOne(ac => ac.Character)
                 .WithMany(ac => ac.ActorCharacters)
                 .HasForeignKey(ac => ac.CharacterID);
 
-                
+            //ANIMES AND ACTORS M:M
+
+            builder.Entity<AnimeActor>()
+                .HasKey(aa => new { aa.ActorID, aa.AnimeID });
+
+            builder.Entity<AnimeActor>()
+                .HasOne(aa => aa.Anime)
+                .WithMany(aa => aa.AnimeActor)
+                .HasForeignKey(aa => aa.AnimeID);
+
+            builder.Entity<AnimeActor>()
+                .HasOne(aa => aa.Actor)
+                .WithMany(aa => aa.AnimeActor)
+                .HasForeignKey(aa => aa.ActorID);
+
+            //ANIMES AND CHARACTERS M:M
+
+            builder.Entity<AnimeCharacter>()
+                .HasKey(ac => new { ac.CharacterID, ac.AnimeID });
+
+            builder.Entity<AnimeCharacter>()
+                .HasOne(ac => ac.Anime)
+                .WithMany(ac => ac.AnimeCharacter)
+                .HasForeignKey(ac => ac.AnimeID);
+
+            builder.Entity<AnimeCharacter>()
+                .HasOne(ac => ac.Character)
+                .WithMany(ac => ac.AnimeCharacter)
+                .HasForeignKey(ac => ac.CharacterID);
+
+            //ANIMES AND COMMENTS M:M
+
+            builder.Entity<AnimeComment>()
+                .HasKey(ac => new { ac.CommentID, ac.AnimeID });
+
+            builder.Entity<AnimeComment>()
+                .HasOne(ac => ac.Anime)
+                .WithMany(ac => ac.AnimeComment)
+                .HasForeignKey(ac => ac.AnimeID);
+
+            builder.Entity<AnimeComment>()
+                .HasOne(ac => ac.Comment)
+                .WithMany(ac => ac.AnimeComment)
+                .HasForeignKey(ac => ac.CommentID);
+
             //DATA SEEDING
+
             builder.Entity<User>().HasData(
                 new User { Id = "1", UserName = "user1@example.com", Fname = "John", Lname = "Doe", ProfilePicturePath = "/images/profile1.jpg" },
                 new User { Id = "2", UserName = "user2@example.com", Fname = "Jane", Lname = "Smith", ProfilePicturePath = "/images/profile2.jpg" }
@@ -69,10 +115,23 @@ namespace Zanime.Server.Data
         }
 
         public DbSet<User> Users { get; set; }
+
+        //ANIME
         public DbSet<Anime> Animes { get; set; }
+
+        public DbSet<AnimeActor> AnimesActors { get; set; }
+        public DbSet<AnimeCharacter> AnimesCharacters { get; set; }
+        public DbSet<AnimeComment> AnimesComments { get; set; }
+
+        //CHARACTER
         public DbSet<Character> Characters { get; set; }
+
+        //ACTOR
         public DbSet<Actor> Actors { get; set; }
+
         public DbSet<ActorCharacter> ActorCharacters { get; set; }
+
+        //COMMENTS
         public DbSet<Comment> Comments { get; set; }
     }
 }

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Core;
 

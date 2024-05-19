@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Models.Main
 {
@@ -19,5 +15,7 @@ namespace Zanime.Server.Models.Main
 
         //One anime character can have many actors or can even not have one
         public ICollection<ActorCharacter>? ActorCharacters { get; set; }
+
+        public ICollection<AnimeCharacter> AnimeCharacter { get; set; }
     }
 }

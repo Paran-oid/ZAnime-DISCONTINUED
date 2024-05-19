@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zanime.Server.Data;
 
@@ -11,9 +12,11 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240519185748_Mini fix for relationships names for anime #2")]
+    partial class Minifixforrelationshipsnamesforanime2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,14 +237,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "609546ee-c078-4689-95eb-1dd588a82f38",
+                            ConcurrencyStamp = "fb2ef85e-b8e0-4786-8e6f-b3cc821f0782",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "83cc9934-6529-4cda-8510-c8be9713d76f",
+                            SecurityStamp = "c2e11728-795d-4f3e-9d61-a59d2c08669f",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -249,14 +252,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9dc7c191-8c25-4f9e-94a3-8d69bfcbb819",
+                            ConcurrencyStamp = "6533d40d-b02c-48cc-884b-7aa9cd3d8781",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "c8a39f6c-2fd9-4832-b6b6-249ad53e7a95",
+                            SecurityStamp = "73bf2e60-bb49-4f3e-b868-42c334727646",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });

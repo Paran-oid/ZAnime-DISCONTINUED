@@ -1,4 +1,6 @@
-﻿namespace Zanime.Server.Models.Main
+﻿using Zanime.Server.Models.Main.Relationships;
+
+namespace Zanime.Server.Models.Main
 {
     public class Actor
     {
@@ -13,5 +15,7 @@
 
         //One autor can have many anime characters he voices
         public ICollection<ActorCharacter>? ActorCharacters { get; set; }
+
+        public ICollection<AnimeActor> AnimeActor { get; set; }
     }
 }
