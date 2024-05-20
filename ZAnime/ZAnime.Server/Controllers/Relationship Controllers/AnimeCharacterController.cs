@@ -34,17 +34,15 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
                 Age = model.Age,
                 Gender = model.Gender,
                 PicturePath = model.PicturePath,
-                Bio = model.Bio,
+                Bio = model.Bio
             };
-
-            int CharacterID = character.ID;
 
             await _context.Characters.AddAsync(character);
             await _context.SaveChangesAsync();
 
             AnimeCharacter relation = new AnimeCharacter
             {
-                CharacterID = CharacterID,
+                CharacterID = character.ID,
                 AnimeID = AnimeID,
             };
 

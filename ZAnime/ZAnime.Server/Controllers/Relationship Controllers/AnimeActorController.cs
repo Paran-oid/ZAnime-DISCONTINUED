@@ -36,14 +36,12 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
                 Bio = model.Bio,
             };
 
-            int ActorID = actor.ID;
-
             await _context.Actors.AddAsync(actor);
             await _context.SaveChangesAsync();
 
             AnimeActor relation = new AnimeActor
             {
-                ActorID = ActorID,
+                ActorID = actor.ID,
                 AnimeID = AnimeID,
             };
 
