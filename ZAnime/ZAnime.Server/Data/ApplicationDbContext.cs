@@ -111,6 +111,11 @@ namespace Zanime.Server.Data
                 new Comment { ID = 2, Content = "Attack on Titan is an intense and gripping anime.", Likes = 20, UserId = "2" }
             );
 
+            builder.Entity<Genre>().HasData(
+                new Genre { ID = 1, Name = "Action" },
+                new Genre { ID = 2, Name = "Horror" }
+            );
+
             base.OnModelCreating(builder);
         }
 
@@ -133,5 +138,8 @@ namespace Zanime.Server.Data
 
         //COMMENTS
         public DbSet<Comment> Comments { get; set; }
+
+        //GENRE
+        public DbSet<Genre> Genres { get; set; }
     }
 }

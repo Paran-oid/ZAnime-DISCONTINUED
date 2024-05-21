@@ -81,7 +81,7 @@ namespace Zanime.Server.Controllers
 
             if (await _context.Actors.AnyAsync(c => c.Name == actor.Name))
             {
-                return Conflict("Error");
+                return Conflict("This actor already exists");
             }
 
             await _context.Actors.AddAsync(actor);

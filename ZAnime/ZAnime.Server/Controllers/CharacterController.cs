@@ -75,7 +75,7 @@ namespace Zanime.Server.Controllers
 
             if (await _context.Characters.AnyAsync(c => c.Name == character.Name))
             {
-                return Conflict("Error");
+                return Conflict("This character already exists");
             }
 
             await _context.Characters.AddAsync(character);
