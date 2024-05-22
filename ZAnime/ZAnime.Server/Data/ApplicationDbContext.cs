@@ -84,6 +84,20 @@ namespace Zanime.Server.Data
                 .WithMany(ac => ac.AnimeComment)
                 .HasForeignKey(ac => ac.CommentID);
 
+            //ANIMES AND GENRES M:M
+            builder.Entity<AnimeGenre>()
+                .HasKey(ag => new { ag.GenreID, ag.AnimeID });
+
+            builder.Entity<AnimeGenre>()
+                .HasOne(ag => ag.Anime)
+                .WithMany(ag => ag.AnimeGenre)
+                .HasForeignKey(ag => ag.AnimeID);
+
+            builder.Entity<AnimeGenre>()
+                .HasOne(ag => ag.Genre)
+                .WithMany(ag => ag.AnimeGenre)
+                .HasForeignKey(ag => ag.GenreID);
+
             //DATA SEEDING
 
             builder.Entity<User>().HasData(
@@ -97,8 +111,8 @@ namespace Zanime.Server.Data
             );
 
             builder.Entity<Anime>().HasData(
-                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), Genre = "Action, Drama, Fantasy", PicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.", BackgroundPath = "none" },
-                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), Genre = "Action, Comedy, Superhero", PicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.", BackgroundPath = "none" }
+                new Anime { ID = 1, Title = "Attack on Titan", ReleaseDate = new DateOnly(2013, 4, 7), PicturePath = "/images/attack_on_titan.jpg", Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.", BackgroundPath = "none" },
+                new Anime { ID = 2, Title = "My Hero Academia", ReleaseDate = new DateOnly(2016, 4, 3), PicturePath = "/images/my_hero_academia.jpg", Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.", BackgroundPath = "none" }
             );
 
             builder.Entity<Character>().HasData(
@@ -121,12 +135,13 @@ namespace Zanime.Server.Data
 
         public DbSet<User> Users { get; set; }
 
-        //ANIME
+        //ANIME W RELATIONSHIPS 4 ANIME
         public DbSet<Anime> Animes { get; set; }
 
         public DbSet<AnimeActor> AnimesActors { get; set; }
         public DbSet<AnimeCharacter> AnimesCharacters { get; set; }
         public DbSet<AnimeComment> AnimesComments { get; set; }
+        public DbSet<AnimeGenre> AnimesGenres { get; set; }
 
         //CHARACTER
         public DbSet<Character> Characters { get; set; }

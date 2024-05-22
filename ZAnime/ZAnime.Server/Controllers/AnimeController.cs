@@ -27,7 +27,6 @@ namespace Zanime.Server.Controllers
                     BackgroundPath = a.BackgroundPath,
                     Description = a.Description,
                     EndDate = a.EndDate,
-                    Genre = a.Genre,
                     PicturePath = a.PicturePath,
                     Rating = a.Rating,
                     ReleaseDate = a.ReleaseDate
@@ -55,7 +54,6 @@ namespace Zanime.Server.Controllers
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate,
                 EndDate = model.EndDate,
-                Genre = model.Genre,
                 PicturePath = model.PicturePath,
                 BackgroundPath = model.BackgroundPath,
                 Description = model.Description,
@@ -85,7 +83,6 @@ namespace Zanime.Server.Controllers
             anime.Title = model.Title;
             anime.ReleaseDate = model.ReleaseDate;
             anime.EndDate = model.EndDate;
-            anime.Genre = model.Genre;
             anime.PicturePath = model.PicturePath;
             anime.BackgroundPath = model.BackgroundPath;
             anime.Description = model.Description;

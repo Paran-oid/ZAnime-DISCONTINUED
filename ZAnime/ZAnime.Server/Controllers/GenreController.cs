@@ -9,7 +9,7 @@ using Zanime.Server.Models.Main.DTO.Genre_Model;
 
 namespace Zanime.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class GenreController : ControllerBase
     {
