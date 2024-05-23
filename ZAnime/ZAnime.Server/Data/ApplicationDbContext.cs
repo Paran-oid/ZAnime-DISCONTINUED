@@ -22,8 +22,25 @@ namespace Zanime.Server.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //SETTING RELATIONSHIPS
+            //SETTING CONSTRAINTS
 
+            builder.Entity<Character>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            builder.Entity<Actor>()
+                .HasIndex(a => a.Name)
+                .IsUnique();
+
+            builder.Entity<Anime>()
+                .HasIndex(a => a.Title)
+                .IsUnique();
+
+            builder.Entity<Genre>()
+                .HasIndex(g => g.Name)
+                .IsUnique();
+
+            //SETTING RELATIONSHIPS
             //ACTORS AND CHARACTERS M:M
 
             builder.Entity<ActorCharacter>()

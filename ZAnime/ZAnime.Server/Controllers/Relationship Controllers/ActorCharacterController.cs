@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
+using Zanime.Server.Models.Main.DTO.Character_Model;
 using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Controllers
@@ -16,6 +17,40 @@ namespace Zanime.Server.Controllers
         public ActorCharacterController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("{ActorID}")]
+        public async Task<ActionResult<List<Character>>> GetCharacters(int ActorID)
+        {
+            var characters = await _context.ActorCharacters
+                .Include(c => c.Character)
+                .Where(ac => ac.ActorID == ActorID)
+                .Select(ac => ac.Character)
+                .ToListAsync();
+
+            if (characters == null || characters.Count == 0)
+            {
+                return Ok("No characters for this actor");
+            }
+
+            return Ok(characters);
+        }
+
+        [HttpGet("{CharacterID}")]
+        public async Task<ActionResult<List<Character>>> GetActors(int CharacterID)
+        {
+            var actors = await _context.ActorCharacters
+                .Include(c => c.Actor)
+                .Where(ac => ac.CharacterID == CharacterID)
+                .Select(ac => ac.Character)
+            .ToListAsync();
+
+            if (actors == null || actors.Count == 0)
+            {
+                return Ok("No actors for this actor");
+            }
+
+            return Ok(actors);
         }
 
         [HttpPost("{CharacterID}")]
