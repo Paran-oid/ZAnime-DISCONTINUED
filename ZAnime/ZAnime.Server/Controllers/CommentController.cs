@@ -31,16 +31,17 @@ namespace Zanime.Server.Controllers
                 ID = c.ID,
                 Content = c.Content,
                 Likes = c.Likes,
+                AnimeID = c.AnimeID,
                 UserId = c.UserId
             }).ToList();
 
             return Ok(result);
         }
 
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<CommentVMDisplay>> Get(int ID)
+        [HttpGet("{CommentID}")]
+        public async Task<ActionResult<CommentVMDisplay>> Get(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -48,51 +49,60 @@ namespace Zanime.Server.Controllers
             return Ok(comment);
         }
 
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<CommentVM>> ShowUserComments(string ID)
+        [HttpGet("{UserID}")]
+        public async Task<ActionResult<CommentVM>> ShowUserComments(string UserID)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == ID);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserID);
             if (user == null)
             {
                 return NotFound("No user was found");
             }
             var comments = _context.Comments
-                .Where(c => c.UserId == ID)
+                .Where(c => c.UserId == UserID)
                 .Select(c => new CommentVM
                 {
-                    Content = c.Content
+                    Content = c.Content,
+                    AnimeID = c.AnimeID
                 })
                 .ToList();
             return Ok(comments);
         }
 
-        [HttpPost("{ID}")]
-        public async Task<ActionResult<string>> Post(CommentVM model, string ID)
+        [HttpPost("{UserID}")]
+        public async Task<ActionResult<string>> Post(CommentVM model, string UserID)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == ID);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserID);
 
             if (user == null)
             {
                 return NotFound("No user was found");
+            }
+
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == model.AnimeID);
+
+            if (anime == null)
+            {
+                return NotFound("No anime was found");
             }
 
             Comment comment = new Comment
             {
                 Content = model.Content,
                 Likes = 0,
-                User = user
+                User = user,
+                Anime = anime
             };
 
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return Ok($"{user.UserName} added a comment");
+            return Ok($"{user.UserName} added a comment to {anime.Title}");
         }
 
-        [HttpPut("{ID}")]
-        public async Task<ActionResult<string>> Put(CommentVM model, int ID)
+        [HttpPut("{CommentID}")]
+        public async Task<ActionResult<string>> Put(CommentUpdateVM model, int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -105,10 +115,10 @@ namespace Zanime.Server.Controllers
             return Ok("comment was modified");
         }
 
-        [HttpPut("{ID}")]
-        public async Task<ActionResult> LikeComment(int ID)
+        [HttpPut("{CommentID}")]
+        public async Task<ActionResult> LikeComment(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
             if (comment == null)
             {
                 return NotFound();
@@ -119,10 +129,10 @@ namespace Zanime.Server.Controllers
             return Ok();
         }
 
-        [HttpPut("{ID}")]
-        public async Task<ActionResult> DislikeComment(int ID)
+        [HttpPut("{CommentID}")]
+        public async Task<ActionResult> DislikeComment(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
 
             if (comment == null)
             {
@@ -135,10 +145,10 @@ namespace Zanime.Server.Controllers
             return Ok();
         }
 
-        [HttpDelete("{ID}")]
-        public async Task<ActionResult<string>> Delete(int ID)
+        [HttpDelete("{CommentID}")]
+        public async Task<ActionResult<string>> Delete(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == ID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");

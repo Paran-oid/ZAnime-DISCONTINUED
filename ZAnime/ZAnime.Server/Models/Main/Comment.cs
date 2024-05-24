@@ -9,9 +9,10 @@ namespace Zanime.Server.Models.Main
         public string Content { get; set; }
         public int Likes { get; set; } = 0;
 
+        public int AnimeID { get; set; }
+        public Anime Anime { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public ICollection<AnimeComment> AnimeComment { get; set; }
 
         public void LikeComment()
         {

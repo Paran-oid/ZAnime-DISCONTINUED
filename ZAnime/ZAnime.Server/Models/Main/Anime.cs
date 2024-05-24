@@ -18,6 +18,6 @@ namespace Zanime.Server.Models.Main
 
         public ICollection<AnimeCharacter> AnimeCharacter { get; set; }
 
-        public ICollection<AnimeComment> AnimeComment { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Zanime.Server.Models.Main.Relationships;
 using Zanime.Server.Models.Main;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Models.Main.DTO.Character_Model;
+using Zanime.Server.Models.Main.DTO.Actor_Model;
 
 namespace Zanime.Server.Controllers.Multiple_Interactions
 {
@@ -17,6 +18,30 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
         public AnimeCharacterController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("{AnimeID}")]
+        public async Task<ActionResult<List<Actor>>> GetCharacters(int AnimeID)
+        {
+            var characters = _context.AnimesCharacters
+                .Include(ac => ac.Character)
+                .Where(ac => ac.AnimeID == AnimeID)
+                .Select(ac => new ActorVM
+                {
+                    Name = ac.Character.Name,
+                    Age = ac.Character.Age,
+                    Bio = ac.Character.Bio,
+                    Gender = ac.Character.Gender,
+                    PicturePath = ac.Character.PicturePath
+                })
+                .ToList();
+
+            if (characters.Count() == 0 || characters == null)
+            {
+                return Ok("No characters for this anime");
+            }
+
+            return Ok(characters);
         }
 
         [HttpPost("{AnimeID}")]

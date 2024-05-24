@@ -35,10 +35,10 @@ namespace Zanime.Server.Controllers
             return Ok(animes);
         }
 
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<Anime>> Get(int ID)
+        [HttpGet("{AnimeID}")]
+        public async Task<ActionResult<Anime>> Get(int AnimeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == ID);
+            var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == AnimeID);
             if (anime == null)
             {
                 return NotFound("No anime was found");
@@ -71,10 +71,10 @@ namespace Zanime.Server.Controllers
             return Ok($"{anime.Title} was added ");
         }
 
-        [HttpPut("{ID}")]
-        public async Task<ActionResult<string>> Put(AnimeVM model, int ID)
+        [HttpPut("{AnimeID}")]
+        public async Task<ActionResult<string>> Put(AnimeVM model, int AnimeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == ID);
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
             if (anime == null)
             {
                 return NotFound("No anime was found");
@@ -94,10 +94,10 @@ namespace Zanime.Server.Controllers
             return Ok("Anime was modified");
         }
 
-        [HttpDelete("{ID}")]
-        public async Task<ActionResult<string>> Delete(int ID)
+        [HttpDelete("{AnimeID}")]
+        public async Task<ActionResult<string>> Delete(int AnimeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == ID);
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
             if (anime == null)
             {
                 return NotFound("No anime was found");

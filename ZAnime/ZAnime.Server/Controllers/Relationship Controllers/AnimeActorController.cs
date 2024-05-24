@@ -18,6 +18,30 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
             _context = context;
         }
 
+        [HttpGet("{AnimeID}")]
+        public async Task<ActionResult<List<Actor>>> GetActors(int AnimeID)
+        {
+            var actors = _context.AnimesActors
+                .Include(aa => aa.Actor)
+                .Where(aa => aa.AnimeID == AnimeID)
+                .Select(aa => new ActorVM
+                {
+                    Name = aa.Actor.Name,
+                    Age = aa.Actor.Age,
+                    Bio = aa.Actor.Bio,
+                    Gender = aa.Actor.Gender,
+                    PicturePath = aa.Actor.PicturePath
+                })
+                .ToList();
+
+            if (actors.Count() == 0 || actors == null)
+            {
+                return Ok("No actors for this anime");
+            }
+
+            return Ok(actors);
+        }
+
         [HttpPost("{AnimeID}")]
         public async Task<ActionResult> CreateActorToAnime(int AnimeID, ActorVM model)
         {

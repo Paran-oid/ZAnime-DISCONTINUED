@@ -25,7 +25,14 @@ namespace Zanime.Server.Controllers
             var characters = await _context.ActorCharacters
                 .Include(c => c.Character)
                 .Where(ac => ac.ActorID == ActorID)
-                .Select(ac => ac.Character)
+                .Select(ac => new ActorVM
+                {
+                    Name = ac.Character.Name,
+                    Age = ac.Character.Age,
+                    Bio = ac.Character.Bio,
+                    Gender = ac.Character.Gender,
+                    PicturePath = ac.Character.PicturePath
+                })
                 .ToListAsync();
 
             if (characters == null || characters.Count == 0)
@@ -42,7 +49,14 @@ namespace Zanime.Server.Controllers
             var actors = await _context.ActorCharacters
                 .Include(c => c.Actor)
                 .Where(ac => ac.CharacterID == CharacterID)
-                .Select(ac => ac.Character)
+                .Select(ac => new ActorVM
+                {
+                    Name = ac.Actor.Name,
+                    Age = ac.Actor.Age,
+                    Bio = ac.Actor.Bio,
+                    Gender = ac.Actor.Gender,
+                    PicturePath = ac.Actor.PicturePath
+                })
             .ToListAsync();
 
             if (actors == null || actors.Count == 0)

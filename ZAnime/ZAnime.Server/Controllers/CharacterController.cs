@@ -25,38 +25,15 @@ namespace Zanime.Server.Controllers
             return Ok(characters);
         }
 
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<Character>> Get(int ID)
+        [HttpGet("{CharacterID}")]
+        public async Task<ActionResult<Character>> Get(int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
             }
             return Ok(character);
-        }
-
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<List<Actor>>> GetActors(int ID)
-        {
-            var character = await _context.Characters
-                .Include(c => c.ActorCharacters)
-                    .ThenInclude(ac => ac.Actor)
-                .FirstOrDefaultAsync(c => c.ID == ID);
-
-            if (character.ActorCharacters.Any())
-            {
-                var actors = character.ActorCharacters.Select(ac => new ActorVM
-                {
-                    Name = ac.Actor.Name,
-                    Age = ac.Actor.Age,
-                    Bio = ac.Actor.Bio,
-                    Gender = ac.Actor.Gender,
-                    PicturePath = ac.Actor.PicturePath
-                }).ToList();
-                return Ok(actors);
-            }
-            return Ok("No actors were found");
         }
 
         [HttpPost]
@@ -84,10 +61,10 @@ namespace Zanime.Server.Controllers
             return Ok($"{character.Name} was added ");
         }
 
-        [HttpPut("{ID}")]
-        public async Task<ActionResult<string>> Put(CharacterVM model, int ID)
+        [HttpPut("{CharacterID}")]
+        public async Task<ActionResult<string>> Put(CharacterVM model, int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
@@ -104,10 +81,10 @@ namespace Zanime.Server.Controllers
             return Ok("Character was modified");
         }
 
-        [HttpDelete("{ID}")]
-        public async Task<ActionResult<string>> Delete(int ID)
+        [HttpDelete("{CharacterID}")]
+        public async Task<ActionResult<string>> Delete(int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == ID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
