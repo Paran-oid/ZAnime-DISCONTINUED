@@ -82,6 +82,11 @@ namespace Zanime.Server.Controllers
                 Rating = model.Rating
             };
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (await _context.Animes.AnyAsync(a => a.Title == anime.Title))
             {
                 return Conflict("Anime with this title already exists");
@@ -102,6 +107,11 @@ namespace Zanime.Server.Controllers
                 return NotFound("No anime was found");
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             anime.Title = model.Title;
             anime.ReleaseDate = model.ReleaseDate;
             anime.EndDate = model.EndDate;
@@ -114,6 +124,24 @@ namespace Zanime.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Anime was modified");
+        }
+
+        [HttpPut("{AnimeID}")]
+        public async Task<ActionResult<string>> AddEndDate(int AnimeID, [FromBody] DateOnly EndDate)
+        {
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+
+            if (anime == null)
+            {
+                return NotFound("No anime was found");
+            }
+
+            anime.EndDate = EndDate;
+
+            _context.Animes.Update(anime);
+            await _context.SaveChangesAsync();
+
+            return Ok($"{anime.Title}'s End date is : {EndDate}");
         }
 
         [HttpDelete("{AnimeID}")]

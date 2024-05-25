@@ -51,6 +51,11 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
                 return NotFound("No anime was found");
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var actor = new Actor
             {
                 Name = model.Name,

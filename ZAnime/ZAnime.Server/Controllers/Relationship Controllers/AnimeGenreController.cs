@@ -33,6 +33,11 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
                 Name = model.Name
             };
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             await _context.Genres.AddAsync(genre);
             await _context.SaveChangesAsync();
 

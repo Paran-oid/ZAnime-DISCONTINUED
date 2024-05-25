@@ -85,6 +85,11 @@ namespace Zanime.Server.Controllers
                 return NotFound("No anime was found");
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Comment comment = new Comment
             {
                 Content = model.Content,
@@ -106,6 +111,11 @@ namespace Zanime.Server.Controllers
             if (comment == null)
             {
                 return NotFound("No comment was found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             comment.Content = model.Content;

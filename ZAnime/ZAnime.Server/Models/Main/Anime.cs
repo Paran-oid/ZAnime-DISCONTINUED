@@ -24,7 +24,8 @@ namespace Zanime.Server.Models.Main
         [Required(ErrorMessage = "Title is required")]
         public string Description { get; set; }
 
-        public float Rating { get; set; } = 0;
+        [Range(0, 5, ErrorMessage = "Rating must be between 0 and 5")]
+        public double Rating { get; set; } = 0;
 
         public ICollection<AnimeGenre> AnimeGenre { get; set; }
         public ICollection<AnimeActor> AnimeActor { get; set; }

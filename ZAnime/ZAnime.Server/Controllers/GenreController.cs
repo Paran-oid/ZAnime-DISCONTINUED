@@ -47,6 +47,10 @@ namespace Zanime.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(GenreVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             Genre genre = new Genre
             {
                 Name = model.Name
@@ -70,6 +74,11 @@ namespace Zanime.Server.Controllers
             if (genre == null)
             {
                 return NotFound("No genre was found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             genre.Name = model.Name;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zanime.Server.Data;
 
@@ -11,9 +12,11 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525091125_All Models Validations")]
+    partial class AllModelsValidations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,14 +237,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3376fb2d-f3aa-42db-91b9-b59a4cae1c17",
+                            ConcurrencyStamp = "9860362c-5a57-4090-9fc2-cb1cedf2ae13",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "8b60648e-2b5e-4130-955b-6a855d2d3368",
+                            SecurityStamp = "4705b196-bce8-4c8f-bae9-74576e6ca476",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -249,14 +252,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fd94fdd7-ed07-4689-9cb6-2db6c7643c9b",
+                            ConcurrencyStamp = "35cfeebd-ebc3-4574-8571-4c00b83f4061",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "0045cf3c-3ad4-4b19-8e77-0d9a6035a8c7",
+                            SecurityStamp = "2b3a83bd-9a73-4cc8-b778-3986f2948528",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -351,8 +354,8 @@ namespace Zanime.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("date");
@@ -375,7 +378,7 @@ namespace Zanime.Server.Migrations
                             BackgroundPath = "none",
                             Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.",
                             PicturePath = "/images/attack_on_titan.jpg",
-                            Rating = 0.0,
+                            Rating = 0f,
                             ReleaseDate = new DateOnly(2013, 4, 7),
                             Title = "Attack on Titan"
                         },
@@ -385,7 +388,7 @@ namespace Zanime.Server.Migrations
                             BackgroundPath = "none",
                             Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.",
                             PicturePath = "/images/my_hero_academia.jpg",
-                            Rating = 0.0,
+                            Rating = 0f,
                             ReleaseDate = new DateOnly(2016, 4, 3),
                             Title = "My Hero Academia"
                         });
