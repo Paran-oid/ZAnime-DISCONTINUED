@@ -74,7 +74,7 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
             await _context.AnimesCharacters.AddAsync(relation);
             await _context.SaveChangesAsync();
 
-            return Ok($"character {character.ID} was added to anime {anime.ID}");
+            return Ok($"character {character.Name} was added to anime {anime.Title}");
         }
 
         [HttpPost("{AnimeID},{CharacterID}")]
@@ -107,7 +107,7 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
             await _context.AnimesCharacters.AddAsync(relation);
             await _context.SaveChangesAsync();
 
-            return Ok($"character {CharacterID} was added to anime {AnimeID}");
+            return Ok($"character {character.Name} was added to anime {anime.Title}");
         }
 
         [HttpDelete("{AnimeID},{CharacterID}")]

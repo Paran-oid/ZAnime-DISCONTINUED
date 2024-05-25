@@ -45,7 +45,7 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
             await _context.AnimesGenres.AddAsync(relation);
             await _context.SaveChangesAsync();
 
-            return Ok($"genre {genre.ID} was added to anime {AnimeID}");
+            return Ok($"genre {genre.Name} was added to anime {anime.Title}");
         }
 
         [HttpPost("{AnimeID},{GenreID}")]
@@ -58,16 +58,16 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
                 return Conflict("this relationship already exists");
             }
 
-            var anime = await _context.Animes.AnyAsync(a => a.ID == AnimeID);
+            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
 
-            if (!anime)
+            if (anime == null)
             {
                 return NotFound("This anime wasn't found");
             }
 
-            var genre = await _context.Genres.AnyAsync(g => g.ID == GenreID);
+            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.ID == GenreID);
 
-            if (!genre)
+            if (genre == null)
             {
                 return NotFound("This genre wasn't found");
             }
@@ -81,7 +81,7 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
             await _context.AnimesGenres.AddAsync(relationship);
             await _context.SaveChangesAsync();
 
-            return Ok($"genre {GenreID} was added to anime {AnimeID}");
+            return Ok($"genre {genre.Name} was added to anime {anime.Title}");
         }
 
         [HttpDelete("{AnimeID},{GenreID}")]

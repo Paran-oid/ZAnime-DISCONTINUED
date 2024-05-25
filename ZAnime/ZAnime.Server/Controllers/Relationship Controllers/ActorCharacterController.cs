@@ -80,6 +80,11 @@ namespace Zanime.Server.Controllers
                 return NotFound("No character was found");
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Actor actor = new Actor
             {
                 Name = model.Name,
@@ -121,6 +126,11 @@ namespace Zanime.Server.Controllers
             if (actor == null)
             {
                 return NotFound("No character was found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             Character character = new Character

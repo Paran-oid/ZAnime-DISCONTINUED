@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
 );
+
 //Need them to be able to fetch web api to react
 builder.Services.AddCors(options =>
 {

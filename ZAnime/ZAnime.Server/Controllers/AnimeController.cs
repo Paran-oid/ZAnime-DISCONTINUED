@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Anime_Model;
+using Zanime.Server.Models.Main.DTO.Comment_Model;
 
 namespace Zanime.Server.Controllers
 {
@@ -44,6 +45,27 @@ namespace Zanime.Server.Controllers
                 return NotFound("No anime was found");
             }
             return Ok(anime);
+        }
+
+        [HttpGet("{AnimeID}")]
+        public async Task<ActionResult<List<Comment>>> GetComments(int AnimeID)
+        {
+            var comments = await _context.Comments
+                .Where(c => c.AnimeID == AnimeID)
+                .Select(c => new CommentAnimeVM
+                {
+                    Username = c.User.UserName,
+                    Content = c.Content,
+                    Likes = c.Likes
+                })
+                .ToListAsync();
+
+            if (comments == null)
+            {
+                return Ok("No comments available");
+            }
+
+            return Ok(comments);
         }
 
         [HttpPost]

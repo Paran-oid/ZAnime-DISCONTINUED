@@ -39,6 +39,10 @@ namespace Zanime.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(CharacterVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             Character character = new Character
             {
                 Name = model.Name,
@@ -68,6 +72,11 @@ namespace Zanime.Server.Controllers
             if (character == null)
             {
                 return NotFound("No character was found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             character.Name = model.Name;

@@ -1,4 +1,5 @@
-﻿using Zanime.Server.Models.Core;
+﻿using System.ComponentModel.DataAnnotations;
+using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Models.Main
@@ -6,7 +7,10 @@ namespace Zanime.Server.Models.Main
     public class Comment
     {
         public int ID { get; set; }
+
+        [Required(ErrorMessage = "You need to write something")]
         public string Content { get; set; }
+
         public int Likes { get; set; } = 0;
 
         public int AnimeID { get; set; }

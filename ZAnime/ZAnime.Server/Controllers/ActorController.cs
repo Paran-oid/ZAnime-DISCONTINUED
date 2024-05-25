@@ -39,6 +39,10 @@ namespace Zanime.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(ActorVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             Actor actor = new Actor
             {
                 Name = model.Name,
@@ -68,6 +72,11 @@ namespace Zanime.Server.Controllers
             if (actor == null)
             {
                 return NotFound("No actor was found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             actor.Name = model.Name;
