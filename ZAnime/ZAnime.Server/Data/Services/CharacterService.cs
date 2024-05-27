@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 
@@ -19,9 +20,15 @@ namespace Zanime.Server.Data.Services
             return (characters);
         }
 
-        public async Task<Character> Get(int CharacterID)
+        public async Task<Character> GetByID(int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(a => a.ID == CharacterID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            return (character);
+        }
+
+        public async Task<Character> GetByName(string Name)
+        {
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Name == Name);
             return (character);
         }
 
@@ -59,9 +66,16 @@ namespace Zanime.Server.Data.Services
             return (character);
         }
 
-        public async Task Delete(Character model)
+        public async Task<string> Delete(Character model)
         {
             _context.Characters.Remove(model);
+            await _context.SaveChangesAsync();
+
+            return ("Record Deleted");
+        }
+
+        public async Task SaveChanges()
+        {
             await _context.SaveChangesAsync();
         }
     }

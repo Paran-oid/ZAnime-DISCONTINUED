@@ -2,18 +2,22 @@
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 
-namespace Zanime.Server.Data.Services
+namespace Zanime.Server.Data.Services.Interfaces
 {
     public interface ICharacterService
     {
         public Task<IEnumerable<Character>> GetAll();
 
-        public Task<Character> Get(int CharacterID);
+        public Task<Character> GetByID(int CharacterID);
+
+        public Task<Character> GetByName(string Name);
 
         public Task<Character> Post(CharacterVM model);
 
         public Task<Character> Put(CharacterVM model, int ActorID);
 
-        public Task Delete(Character model);
+        public Task<string> Delete(Character model);
+
+        Task SaveChanges();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
-using Zanime.Server.Data.Services;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
 using Zanime.Server.Models.Main.DTO.Character_Model;
@@ -29,7 +29,7 @@ namespace Zanime.Server.Controllers
         [HttpGet("{ActorID}")]
         public async Task<ActionResult<Actor>> Get(int ActorID)
         {
-            var actor = await _actorService.Get(ActorID);
+            var actor = await _actorService.GetByID(ActorID);
 
             if (actor == null)
             {
@@ -45,6 +45,13 @@ namespace Zanime.Server.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var temp = await _actorService.GetByName(model.Name);
+
+            if (temp != null)
+            {
+                return Conflict("This actor already exists");
             }
 
             await _actorService.Post(model);
@@ -68,16 +75,16 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{ActorID}")]
         public async Task<ActionResult<string>> Delete(int ActorID)
         {
-            var actor = await _actorService.Get(ActorID);
+            var actor = await _actorService.GetByID(ActorID);
 
             if (actor == null)
             {
                 return NotFound("No actor was found");
             }
 
-            await _actorService.Delete(actor);
+            var response = await _actorService.Delete(actor);
 
-            return Ok("actor was Deleted");
+            return Ok(response);
         }
     }
 }

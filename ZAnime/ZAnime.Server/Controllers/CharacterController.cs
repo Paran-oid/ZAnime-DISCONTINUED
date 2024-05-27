@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
 using Zanime.Server.Models.Main.DTO.Character_Model;
@@ -11,24 +12,24 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class CharacterController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICharacterService _characterService;
 
-        public CharacterController(ApplicationDbContext context)
+        public CharacterController(ICharacterService characterService)
         {
-            _context = context;
+            _characterService = characterService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Character>>> GetAll()
         {
-            var characters = await _context.Characters.ToListAsync();
+            var characters = await _characterService.GetAll();
             return Ok(characters);
         }
 
         [HttpGet("{CharacterID}")]
         public async Task<ActionResult<Character>> Get(int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _characterService.GetByID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
@@ -37,71 +38,51 @@ namespace Zanime.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Post(CharacterVM model)
+        public async Task<ActionResult<Character>> Post(CharacterVM model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            Character character = new Character
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
 
-            if (await _context.Characters.AnyAsync(c => c.Name == character.Name))
+            var temp = await _characterService.GetByName(model.Name);
+
+            if (temp != null)
             {
                 return Conflict("This character already exists");
             }
 
-            await _context.Characters.AddAsync(character);
-            await _context.SaveChangesAsync();
+            var response = await _characterService.Post(model);
 
-            return Ok($"{character.Name} was added ");
+            return Ok(response);
         }
 
         [HttpPut("{CharacterID}")]
-        public async Task<ActionResult<string>> Put(CharacterVM model, int CharacterID)
+        public async Task<ActionResult<Character>> Put(CharacterVM model, int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _characterService.GetByID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var response = await _characterService.Put(model, CharacterID);
 
-            character.Name = model.Name;
-            character.Age = model.Age;
-            character.Gender = model.Gender;
-            character.PicturePath = model.PicturePath;
-            character.Bio = model.Bio;
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Character was modified");
+            return Ok(response);
         }
 
         [HttpDelete("{CharacterID}")]
         public async Task<ActionResult<string>> Delete(int CharacterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _characterService.GetByID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
             }
-            _context.Characters.Remove(character);
-            await _context.SaveChangesAsync();
 
-            return Ok("Character was Deleted");
+            var response = await _characterService.Delete(character);
+
+            return Ok(response);
         }
     }
 }

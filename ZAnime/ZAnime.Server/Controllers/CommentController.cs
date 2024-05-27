@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
@@ -12,36 +13,31 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICommentService _commentService;
+        private readonly IAnimeService _animeService;
         private readonly UserManager<User> _usermanager;
 
-        public CommentController(ApplicationDbContext context, UserManager<User> userManager)
+        public CommentController(ICommentService commentService, UserManager<User> userManager, IAnimeService animeService)
         {
-            _context = context;
+            _commentService = commentService;
+            _animeService = animeService;
             _usermanager = userManager;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentVMDisplay>>> GetAll()
+        public async Task<ActionResult<List<CommentVMDisplay>>> GetAll()
         {
-            var comments = await _context.Comments.ToListAsync();
+            var comments = await _commentService.GetAll();
 
-            var result = comments.Select(c => new CommentVMDisplay
-            {
-                ID = c.ID,
-                Content = c.Content,
-                Likes = c.Likes,
-                AnimeID = c.AnimeID,
-                UserId = c.UserId
-            }).ToList();
+            var response = _commentService.Display(comments);
 
-            return Ok(result);
+            return Ok(response);
         }
 
         [HttpGet("{CommentID}")]
         public async Task<ActionResult<CommentVMDisplay>> Get(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _commentService.GetByID(CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -52,33 +48,29 @@ namespace Zanime.Server.Controllers
         [HttpGet("{UserID}")]
         public async Task<ActionResult<CommentVM>> ShowUserComments(string UserID)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserID);
+            var user = await _usermanager.FindByIdAsync(UserID);
+
             if (user == null)
             {
                 return NotFound("No user was found");
             }
-            var comments = _context.Comments
-                .Where(c => c.UserId == UserID)
-                .Select(c => new CommentVM
-                {
-                    Content = c.Content,
-                    AnimeID = c.AnimeID
-                })
-                .ToList();
+
+            var comments = _commentService.GetUserComments(UserID);
+
             return Ok(comments);
         }
 
         [HttpPost("{UserID}")]
-        public async Task<ActionResult<string>> Post(CommentVM model, string UserID)
+        public async Task<ActionResult<Comment>> Post(CommentVM model, string UserID)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserID);
+            var user = await _usermanager.FindByIdAsync(UserID);
 
             if (user == null)
             {
                 return NotFound("No user was found");
             }
 
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == model.AnimeID);
+            var anime = await _animeService.GetID(model.AnimeID);
 
             if (anime == null)
             {
@@ -90,24 +82,15 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            Comment comment = new Comment
-            {
-                Content = model.Content,
-                Likes = 0,
-                User = user,
-                Anime = anime
-            };
+            var response = await _commentService.Post(model, user, anime);
 
-            await _context.Comments.AddAsync(comment);
-            await _context.SaveChangesAsync();
-
-            return Ok($"{user.UserName} added a comment to {anime.Title}");
+            return Ok(response);
         }
 
         [HttpPut("{CommentID}")]
-        public async Task<ActionResult<string>> Put(CommentUpdateVM model, int CommentID)
+        public async Task<ActionResult<Comment>> Put(CommentUpdateVM model, int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _commentService.GetByID(CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -118,23 +101,21 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            comment.Content = model.Content;
+            var response = await _commentService.Put(model, CommentID);
 
-            await _context.SaveChangesAsync();
-
-            return Ok("comment was modified");
+            return Ok(response);
         }
 
         [HttpPut("{CommentID}")]
         public async Task<ActionResult> LikeComment(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _commentService.GetByID(CommentID);
             if (comment == null)
             {
                 return NotFound();
             }
             comment.LikeComment();
-            await _context.SaveChangesAsync();
+            await _commentService.SaveChanges();
 
             return Ok();
         }
@@ -142,7 +123,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{CommentID}")]
         public async Task<ActionResult> DislikeComment(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _commentService.GetByID(CommentID);
 
             if (comment == null)
             {
@@ -150,7 +131,7 @@ namespace Zanime.Server.Controllers
             }
 
             comment.DislikeComment();
-            await _context.SaveChangesAsync();
+            await _commentService.SaveChanges();
 
             return Ok();
         }
@@ -158,15 +139,16 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{CommentID}")]
         public async Task<ActionResult<string>> Delete(int CommentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _commentService.GetByID(CommentID);
+
             if (comment == null)
             {
                 return NotFound("No comment was found");
             }
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
 
-            return Ok("comment was Deleted");
+            var response = await _commentService.Delete(comment);
+
+            return Ok(response);
         }
     }
 }
