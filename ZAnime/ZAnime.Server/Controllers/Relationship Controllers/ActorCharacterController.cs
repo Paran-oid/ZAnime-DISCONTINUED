@@ -25,7 +25,7 @@ namespace Zanime.Server.Controllers
             var characters = await _context.ActorCharacters
                 .Include(c => c.Character)
                 .Where(ac => ac.ActorID == ActorID)
-                .Select(ac => new ActorVM
+                .Select(ac => new CharacterVM
                 {
                     Name = ac.Character.Name,
                     Age = ac.Character.Age,
@@ -49,7 +49,7 @@ namespace Zanime.Server.Controllers
             var actors = await _context.ActorCharacters
                 .Include(c => c.Actor)
                 .Where(ac => ac.CharacterID == CharacterID)
-                .Select(ac => new ActorVM
+                .Select(ac => new CharacterVM
                 {
                     Name = ac.Actor.Name,
                     Age = ac.Actor.Age,

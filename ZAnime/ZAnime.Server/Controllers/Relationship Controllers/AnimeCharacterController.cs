@@ -26,7 +26,7 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
             var characters = _context.AnimesCharacters
                 .Include(ac => ac.Character)
                 .Where(ac => ac.AnimeID == AnimeID)
-                .Select(ac => new ActorVM
+                .Select(ac => new CharacterVM
                 {
                     Name = ac.Character.Name,
                     Age = ac.Character.Age,
@@ -45,7 +45,7 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
         }
 
         [HttpPost("{AnimeID}")]
-        public async Task<ActionResult> CreateCharacterToAnime(int AnimeID, CharacterVM model)
+        public async Task<ActionResult> CreateCharacterToAnime(int AnimeID, Models.Main.DTO.Character_Model.CharacterVM model)
         {
             var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
             if (anime == null)

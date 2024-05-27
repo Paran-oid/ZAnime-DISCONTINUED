@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services;
 using Zanime.Server.Models.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,10 @@ builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddControllers().AddJsonOptions(x =>
 //   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+//APP SERVICES
+builder.Services.AddScoped<IActorService, ActorService>();
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 var app = builder.Build();
 
