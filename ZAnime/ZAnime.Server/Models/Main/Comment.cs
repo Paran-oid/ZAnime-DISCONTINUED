@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main.Relationships;
 
@@ -14,7 +16,9 @@ namespace Zanime.Server.Models.Main
         public int Likes { get; set; } = 0;
 
         public int AnimeID { get; set; }
+
         public Anime Anime { get; set; }
+
         public string UserId { get; set; }
         public User User { get; set; }
 

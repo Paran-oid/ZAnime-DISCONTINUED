@@ -61,7 +61,7 @@ namespace Zanime.Server.Controllers
         }
 
         [HttpPost("{UserID}")]
-        public async Task<ActionResult<Comment>> Post(CommentVM model, string UserID)
+        public async Task<ActionResult<CommentVMDisplay>> Post(CommentVM model, string UserID)
         {
             var user = await _usermanager.FindByIdAsync(UserID);
 
@@ -82,7 +82,10 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var response = await _commentService.Post(model, user, anime);
+            string userID = user.Id;
+            int animeID = anime.ID;
+
+            var response = await _commentService.Post(model, userID, animeID);
 
             return Ok(response);
         }

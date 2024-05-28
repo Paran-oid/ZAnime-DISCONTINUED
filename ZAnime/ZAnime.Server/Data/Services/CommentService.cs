@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Core;
 using Zanime.Server.Models.Main;
+using Zanime.Server.Models.Main.DTO.Anime_Model;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
 using Zanime.Server.Models.Main.DTO.Genre_Model;
 
@@ -57,19 +58,28 @@ namespace Zanime.Server.Data.Services
             return (comments);
         }
 
-        public async Task<Comment> Post(CommentVM model, User user, Anime anime)
+        public async Task<CommentVMDisplay> Post(CommentVM model, string userID, int animeID)
         {
             Comment comment = new Comment
             {
                 Content = model.Content,
-                User = user,
-                Anime = anime
+                UserId = userID,
+                AnimeID = animeID
             };
 
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return (comment);
+            var response = new CommentVMDisplay
+            {
+                Content = comment.Content,
+                Likes = comment.Likes,
+                ID = comment.ID,
+                UserId = userID,
+                AnimeID = animeID,
+            };
+
+            return (response);
         }
 
         public async Task<Comment> Put(CommentUpdateVM model, int CommentID)

@@ -14,7 +14,7 @@ namespace Zanime.Server.Data.Services.Interfaces
 
         public List<CommentVM>? GetUserComments(string UserID);
 
-        public Task<Comment> Post(CommentVM model, User user, Anime anime);
+        public Task<CommentVMDisplay> Post(CommentVM model, string userID, int animeID);
 
         public Task<Comment> Put(CommentUpdateVM model, int CommentID);
 

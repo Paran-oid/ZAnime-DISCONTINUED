@@ -51,9 +51,9 @@ namespace Zanime.Server.Data.Services
             return (character);
         }
 
-        public async Task<Character> Put(CharacterVM model, int CharacterID)
+        public async Task<Character> Put(CharacterVM model, int characterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == characterID);
 
             character.Name = model.Name;
             character.Age = model.Age;
