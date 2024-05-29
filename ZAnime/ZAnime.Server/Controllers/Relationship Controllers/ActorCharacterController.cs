@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
 using Zanime.Server.Models.Main.DTO.Character_Model;
@@ -12,30 +13,25 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class ActorCharacterController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IActorRelationships _actorRelationships;
+        private readonly IActorService _actorService;
+        private readonly ICharacterService _characterService;
 
-        public ActorCharacterController(ApplicationDbContext context)
+        public ActorCharacterController(IActorRelationships actorRelationships,
+                                        IActorService actorService,
+                                        ICharacterService characterService)
         {
-            _context = context;
+            _actorRelationships = actorRelationships;
+            _actorService = actorService;
+            _characterService = characterService;
         }
 
-        [HttpGet("{ActorID}")]
-        public async Task<ActionResult<List<Character>>> GetCharacters(int ActorID)
+        [HttpGet("{actorID}")]
+        public async Task<ActionResult<List<Character>>> GetCharacters(int actorID)
         {
-            var characters = await _context.ActorCharacters
-                .Include(c => c.Character)
-                .Where(ac => ac.ActorID == ActorID)
-                .Select(ac => new CharacterVM
-                {
-                    Name = ac.Character.Name,
-                    Age = ac.Character.Age,
-                    Bio = ac.Character.Bio,
-                    Gender = ac.Character.Gender,
-                    PicturePath = ac.Character.PicturePath
-                })
-                .ToListAsync();
+            var characters = await _actorRelationships.GetCharacters(actorID);
 
-            if (characters == null || characters.Count == 0)
+            if (characters == null || characters.Count() == 0)
             {
                 return Ok("No characters for this actor");
             }
@@ -46,20 +42,9 @@ namespace Zanime.Server.Controllers
         [HttpGet("{CharacterID}")]
         public async Task<ActionResult<List<Character>>> GetActors(int CharacterID)
         {
-            var actors = await _context.ActorCharacters
-                .Include(c => c.Actor)
-                .Where(ac => ac.CharacterID == CharacterID)
-                .Select(ac => new CharacterVM
-                {
-                    Name = ac.Actor.Name,
-                    Age = ac.Actor.Age,
-                    Bio = ac.Actor.Bio,
-                    Gender = ac.Actor.Gender,
-                    PicturePath = ac.Actor.PicturePath
-                })
-            .ToListAsync();
+            var actors = await _actorRelationships.GetActors(CharacterID);
 
-            if (actors == null || actors.Count == 0)
+            if (actors == null || actors.Count() == 0)
             {
                 return Ok("No actors for this actor");
             }
@@ -67,13 +52,10 @@ namespace Zanime.Server.Controllers
             return Ok(actors);
         }
 
-        [HttpPost("{CharacterID}")]
-        public async Task<ActionResult<string>> CreateActorToCharacter(int CharacterID, ActorVM model)
+        [HttpPost("{characterID}")]
+        public async Task<ActionResult<string>> CreateActorToCharacter(int characterID, ActorVM model)
         {
-            var character = await _context.Characters
-                .Include(c => c.ActorCharacters)
-                .ThenInclude(ac => ac.Actor)
-                .FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _actorRelationships.GetCharacterWithActor(characterID);
 
             if (character == null)
             {
@@ -85,43 +67,15 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            Actor actor = new Actor
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
+            var response = await _actorRelationships.CreateActorToCharacter(character, model);
 
-            await _context.Actors.AddAsync(actor);
-            //This is important so we can get the ID
-            await _context.SaveChangesAsync();
-
-            ActorCharacter actorCharacter = new ActorCharacter
-            {
-                ActorID = actor.ID,
-                CharacterID = character.ID
-            };
-
-            await _context.ActorCharacters.AddAsync(actorCharacter);
-
-            character.ActorCharacters.Add(actorCharacter);
-
-            await _context.SaveChangesAsync();
-
-            return Ok($"{actor.Name} was created for {character.Name}");
+            return Ok(response);
         }
 
-        [HttpPost("{ActorID}")]
-        public async Task<ActionResult<string>> CreateCharacterToActor(int ActorID, ActorVM model)
+        [HttpPost("{actorID}")]
+        public async Task<ActionResult<string>> CreateCharacterToActor(int actorID, CharacterVM model)
         {
-            var actor = await _context.Actors
-                .Include(c => c.ActorCharacters)
-                .ThenInclude(ac => ac.Character)
-                .FirstOrDefaultAsync(c => c.ID == ActorID);
+            var actor = await _actorRelationships.GetActorWithCharacter(actorID);
 
             if (actor == null)
             {
@@ -133,79 +87,43 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            Character character = new Character
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
+            var response = await _actorRelationships.CreateCharacterToActor(actor, model);
 
-            await _context.Characters.AddAsync(character);
-            //This is important so we can get the ID
-            await _context.SaveChangesAsync();
-
-            ActorCharacter actorcharacter = new ActorCharacter
-            {
-                ActorID = actor.ID,
-                CharacterID = character.ID
-            };
-
-            await _context.ActorCharacters.AddAsync(actorcharacter);
-            //This line makes sure the actorcharacter relation was added to the class itself
-            actor.ActorCharacters.Add(actorcharacter);
-            await _context.SaveChangesAsync();
-
-            return Ok($"{character.Name} was created for {actor.Name}");
+            return Ok(response);
         }
 
-        [HttpPost("{ActorID},{CharacterID}")]
-        public async Task<ActionResult<string>> AddActorToCharacter(int ActorID, int CharacterID)
+        [HttpPost("{actorID},{characterID}")]
+        public async Task<ActionResult<string>> AddActorToCharacter(int actorID, int characterID)
         {
-            var actor = await _context.Actors.FirstOrDefaultAsync(a => a.ID == ActorID);
+            var actor = await _actorService.GetByID(actorID);
             if (actor == null)
             {
                 return NotFound("no actor was found");
             }
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _characterService.GetByID(characterID);
             if (character == null)
             {
                 return NotFound("no character was found");
             }
 
-            ActorCharacter actorCharacter = new ActorCharacter
-            {
-                ActorID = ActorID,
-                CharacterID = character.ID
-            };
+            var response = await _actorRelationships.AddCharacterToActor(actor, character);
 
-            _context.ActorCharacters.Add(actorCharacter);
-            actor.ActorCharacters.Add(actorCharacter);
-            character.ActorCharacters.Add(actorCharacter);
-
-            await _context.SaveChangesAsync();
-
-            return Ok($"{actor.Name} was added to {character.Name}");
+            return Ok(response);
         }
 
-        [HttpDelete("{ActorID},{CharacterID}")]
-        public async Task<ActionResult> RemoveRelationship(int ActorID, int CharacterID)
+        [HttpDelete("{actorID},{characterID}")]
+        public async Task<ActionResult> RemoveRelationship(int actorID, int characterID)
         {
-            var relationship = await _context.ActorCharacters.FirstOrDefaultAsync(ac => ac.ActorID == ActorID
-                                                                                  && ac.CharacterID == CharacterID);
+            var relationship = await _actorRelationships.GetActorCharacter(actorID, characterID);
 
             if (relationship == null)
             {
                 return NotFound("No relationship of this kind");
             }
 
-            _context.ActorCharacters.Remove(relationship);
-            await _context.SaveChangesAsync();
+            var response = await _actorRelationships.Delete(relationship);
 
-            return Ok("Relationship deleted successfully");
+            return Ok(response);
         }
     }
 }

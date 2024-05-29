@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Zanime.Server.Data;
 using Zanime.Server.Data.Services;
 using Zanime.Server.Data.Services.Interfaces;
+using Zanime.Server.Data.Services.Relationships;
 using Zanime.Server.Models.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +51,9 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+
+// =====> APP SERVICES RELATIONSHIPS
+builder.Services.AddScoped<IActorRelationships, ActorRelationships>();
 
 var app = builder.Build();
 

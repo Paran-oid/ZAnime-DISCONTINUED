@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Anime_Model;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
@@ -11,54 +12,37 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class AnimeController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimeService _animeService;
 
-        public AnimeController(ApplicationDbContext context)
+        public AnimeController(IAnimeService animeService)
         {
-            _context = context;
+            _animeService = animeService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Anime>>> GetAll()
+        public async Task<ActionResult<IEnumerable<AnimeVM>>> GetAll()
         {
-            var animes = await _context.Animes
-                .Select(a => new AnimeVM
-                {
-                    Title = a.Title,
-                    BackgroundPath = a.BackgroundPath,
-                    Description = a.Description,
-                    EndDate = a.EndDate,
-                    PicturePath = a.PicturePath,
-                    Rating = a.Rating,
-                    ReleaseDate = a.ReleaseDate
-                })
-                .ToListAsync();
+            var animes = await _animeService.GetAll();
             return Ok(animes);
         }
 
-        [HttpGet("{AnimeID}")]
-        public async Task<ActionResult<Anime>> Get(int AnimeID)
+        [HttpGet("{animeID}")]
+        public async Task<ActionResult<Anime>> Get(int animeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
+
             if (anime == null)
             {
                 return NotFound("No anime was found");
             }
+
             return Ok(anime);
         }
 
-        [HttpGet("{AnimeID}")]
-        public async Task<ActionResult<List<Comment>>> GetComments(int AnimeID)
+        [HttpGet("{animeID}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int animeID)
         {
-            var comments = await _context.Comments
-                .Where(c => c.AnimeID == AnimeID)
-                .Select(c => new CommentAnimeVM
-                {
-                    Username = c.User.UserName,
-                    Content = c.Content,
-                    Likes = c.Likes
-                })
-                .ToListAsync();
+            var comments = await _animeService.GetComments(animeID);
 
             if (comments == null)
             {
@@ -69,40 +53,27 @@ namespace Zanime.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Post(AnimeVM model)
+        public async Task<ActionResult<Anime>> Post(AnimeVM model)
         {
-            Anime anime = new Anime
-            {
-                Title = model.Title,
-                ReleaseDate = model.ReleaseDate,
-                EndDate = model.EndDate,
-                PicturePath = model.PicturePath,
-                BackgroundPath = model.BackgroundPath,
-                Description = model.Description,
-                Rating = model.Rating
-            };
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (await _context.Animes.AnyAsync(a => a.Title == anime.Title))
+            if (await _animeService.GetByTitle(model.Title) != null)
             {
                 return Conflict("Anime with this title already exists");
             }
 
-            await _context.Animes.AddAsync(anime);
-            await _context.SaveChangesAsync();
+            var response = await _animeService.Post(model);
 
-            return Ok($"{anime.Title} was added ");
+            return (response);
         }
 
-        [HttpPut("{AnimeID}")]
-        public async Task<ActionResult<string>> Put(AnimeVM model, int AnimeID)
+        [HttpPut("{animeID}")]
+        public async Task<ActionResult<string>> Put(AnimeVM model, int animeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
-            if (anime == null)
+            if (await _animeService.GetID(animeID) == null)
             {
                 return NotFound("No anime was found");
             }
@@ -112,50 +83,39 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            anime.Title = model.Title;
-            anime.ReleaseDate = model.ReleaseDate;
-            anime.EndDate = model.EndDate;
-            anime.PicturePath = model.PicturePath;
-            anime.BackgroundPath = model.BackgroundPath;
-            anime.Description = model.Description;
-            anime.Rating = model.Rating;
+            var response = await _animeService.Put(animeID, model);
 
-            _context.Animes.Update(anime);
-            await _context.SaveChangesAsync();
-
-            return Ok("Anime was modified");
+            return Ok(response);
         }
 
-        [HttpPut("{AnimeID}")]
-        public async Task<ActionResult<string>> AddEndDate(int AnimeID, [FromBody] DateOnly EndDate)
+        [HttpPut("{animeID}")]
+        public async Task<ActionResult<string>> AddEndDate(int animeID, [FromBody] DateOnly endDate)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
 
             if (anime == null)
             {
                 return NotFound("No anime was found");
             }
 
-            anime.EndDate = EndDate;
+            var response = await _animeService.AddEndDate(animeID, endDate);
 
-            _context.Animes.Update(anime);
-            await _context.SaveChangesAsync();
-
-            return Ok($"{anime.Title}'s End date is : {EndDate}");
+            return Ok(response);
         }
 
-        [HttpDelete("{AnimeID}")]
-        public async Task<ActionResult<string>> Delete(int AnimeID)
+        [HttpDelete("{animeID}")]
+        public async Task<ActionResult<string>> Delete(int animeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
+
             if (anime == null)
             {
                 return NotFound("No anime was found");
             }
-            _context.Animes.Remove(anime);
-            await _context.SaveChangesAsync();
 
-            return Ok("Anime was Deleted");
+            var response = await _animeService.Delete(animeID);
+
+            return Ok(response);
         }
     }
 }
