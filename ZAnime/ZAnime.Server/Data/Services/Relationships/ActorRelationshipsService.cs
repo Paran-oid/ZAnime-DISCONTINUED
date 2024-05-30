@@ -8,11 +8,11 @@ using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Data.Services.Relationships
 {
-    public class ActorRelationships : IActorRelationships
+    public class ActorRelationshipsService : IActorRelationshipsService
     {
         private readonly ApplicationDbContext _context;
 
-        public ActorRelationships(ApplicationDbContext context)
+        public ActorRelationshipsService(ApplicationDbContext context)
         {
             _context = context;
         }

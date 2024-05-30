@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data;
+using Zanime.Server.Data.Services.Interfaces;
+using Zanime.Server.Data.Services.Interfaces.Relationships;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Genre_Model;
 using Zanime.Server.Models.Main.Relationships;
@@ -12,98 +14,89 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
     [ApiController]
     public class AnimeGenreController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimeRelationshipsService _animeRelationshipsService;
+        private readonly IAnimeService _animeService;
+        private readonly IGenreService _genreService;
 
-        public AnimeGenreController(ApplicationDbContext context)
+        public AnimeGenreController(IAnimeRelationshipsService animeRelationshipsService,
+                                    IAnimeService animeService,
+                                    IGenreService genreService)
         {
-            _context = context;
+            _animeRelationshipsService = animeRelationshipsService;
+            _animeService = animeService;
+            _genreService = genreService;
         }
 
-        [HttpPost("{AnimeID}")]
-        public async Task<ActionResult<string>> CreateGenreToAnime(int AnimeID, GenreVM model)
+        [HttpGet("{animeID}")]
+        public async Task<IEnumerable<GenreVM>> GetGenres(int animeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var genres = await _animeRelationshipsService.GetGenres(animeID);
+
+            return (genres);
+        }
+
+        [HttpPost("{animeID}")]
+        public async Task<ActionResult<string>> CreateGenreToAnime(int animeID, GenreVM model)
+        {
+            var anime = await _animeService.GetID(animeID);
+
             if (anime == null)
             {
                 return NotFound("No anime found");
             }
-
-            Genre genre = new Genre
-            {
-                Name = model.Name
-            };
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _context.Genres.AddAsync(genre);
-            await _context.SaveChangesAsync();
+            var response = await _animeRelationshipsService.CreateGenreToAnime(model, animeID);
 
-            AnimeGenre relation = new AnimeGenre
-            {
-                AnimeID = AnimeID,
-                GenreID = genre.ID,
-            };
-
-            await _context.AnimesGenres.AddAsync(relation);
-            await _context.SaveChangesAsync();
-
-            return Ok($"genre {genre.Name} was added to anime {anime.Title}");
+            return Ok(response);
         }
 
-        [HttpPost("{AnimeID},{GenreID}")]
-        public async Task<ActionResult<string>> AddGenreToAnime(int AnimeID, int GenreID)
+        [HttpPost("{animeID},{genreID}")]
+        public async Task<ActionResult<string>> AddGenreToAnime(int animeID, int genreID)
         {
-            var temp = await _context.AnimesGenres.AnyAsync(ag => ag.AnimeID == AnimeID
-                                                           && ag.GenreID == GenreID);
-            if (temp)
+            var temp = await _animeRelationshipsService.GetRelationshipGenre(animeID, genreID);
+
+            if (temp != null)
             {
                 return Conflict("this relationship already exists");
             }
 
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
 
             if (anime == null)
             {
                 return NotFound("This anime wasn't found");
             }
 
-            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.ID == GenreID);
+            var genre = await _genreService.GetByID(genreID);
 
             if (genre == null)
             {
                 return NotFound("This genre wasn't found");
             }
 
-            AnimeGenre relationship = new AnimeGenre
-            {
-                AnimeID = AnimeID,
-                GenreID = GenreID
-            };
+            var response = await _animeRelationshipsService.AddGenreToAnime(animeID, genreID);
 
-            await _context.AnimesGenres.AddAsync(relationship);
-            await _context.SaveChangesAsync();
-
-            return Ok($"genre {genre.Name} was added to anime {anime.Title}");
+            return Ok(response);
         }
 
-        [HttpDelete("{AnimeID},{GenreID}")]
-        public async Task<ActionResult> RemoveRelationship(int AnimeID, int GenreID)
+        [HttpDelete("{animeID},{genreID}")]
+        public async Task<ActionResult> RemoveRelationship(int animeID, int genreID)
         {
-            var relationship = await _context.AnimesGenres.FirstOrDefaultAsync(aa => aa.AnimeID == AnimeID
-                                                   && aa.GenreID == GenreID);
+            var relationship = await _animeRelationshipsService.GetRelationshipGenre(animeID, genreID);
 
             if (relationship == null)
             {
                 return Conflict("This relationship doesn't exists");
             }
 
-            _context.AnimesGenres.Remove(relationship);
-            await _context.SaveChangesAsync();
+            string response = await _animeRelationshipsService.RemoveRelationshipGenre(relationship);
 
-            return Ok("Relationship deleted successfully");
+            return Ok(response);
         }
     }
 }

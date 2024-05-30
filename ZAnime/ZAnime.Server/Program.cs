@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Zanime.Server.Data;
 using Zanime.Server.Data.Services;
 using Zanime.Server.Data.Services.Interfaces;
+using Zanime.Server.Data.Services.Interfaces.Relationships;
 using Zanime.Server.Data.Services.Relationships;
 using Zanime.Server.Models.Core;
 
@@ -53,7 +54,8 @@ builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 
 // =====> APP SERVICES RELATIONSHIPS
-builder.Services.AddScoped<IActorRelationships, ActorRelationships>();
+builder.Services.AddScoped<IActorRelationshipsService, ActorRelationshipsService>();
+builder.Services.AddScoped<IAnimeRelationshipsService, AnimeRelationshipsService>();
 
 var app = builder.Build();
 

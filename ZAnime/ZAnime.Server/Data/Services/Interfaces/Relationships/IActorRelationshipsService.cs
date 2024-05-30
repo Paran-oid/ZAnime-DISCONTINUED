@@ -5,7 +5,7 @@ using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Data.Services.Interfaces
 {
-    public interface IActorRelationships
+    public interface IActorRelationshipsService
     {
         public Task<ActorCharacter> GetActorCharacter(int actorID, int characterID);
 

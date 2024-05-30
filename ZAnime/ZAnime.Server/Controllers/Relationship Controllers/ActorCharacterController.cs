@@ -13,11 +13,11 @@ namespace Zanime.Server.Controllers
     [ApiController]
     public class ActorCharacterController : ControllerBase
     {
-        private readonly IActorRelationships _actorRelationships;
+        private readonly IActorRelationshipsService _actorRelationships;
         private readonly IActorService _actorService;
         private readonly ICharacterService _characterService;
 
-        public ActorCharacterController(IActorRelationships actorRelationships,
+        public ActorCharacterController(IActorRelationshipsService actorRelationships,
                                         IActorService actorService,
                                         ICharacterService characterService)
         {

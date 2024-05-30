@@ -6,6 +6,8 @@ using Zanime.Server.Models.Main;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Models.Main.DTO.Character_Model;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
+using Zanime.Server.Data.Services.Interfaces.Relationships;
+using Zanime.Server.Data.Services.Interfaces;
 
 namespace Zanime.Server.Controllers.Multiple_Interactions
 {
@@ -13,28 +15,23 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
     [ApiController]
     public class AnimeCharacterController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimeRelationshipsService _animeRelationshipsService;
+        private readonly IAnimeService _animeService;
+        private readonly ICharacterService _characterService;
 
-        public AnimeCharacterController(ApplicationDbContext context)
+        public AnimeCharacterController(IAnimeRelationshipsService animeRelationshipsService,
+                                        IAnimeService animeService,
+                                        ICharacterService characterService)
         {
-            _context = context;
+            _animeRelationshipsService = animeRelationshipsService;
+            _animeService = animeService;
+            _characterService = characterService;
         }
 
         [HttpGet("{AnimeID}")]
         public async Task<ActionResult<List<Actor>>> GetCharacters(int AnimeID)
         {
-            var characters = _context.AnimesCharacters
-                .Include(ac => ac.Character)
-                .Where(ac => ac.AnimeID == AnimeID)
-                .Select(ac => new CharacterVM
-                {
-                    Name = ac.Character.Name,
-                    Age = ac.Character.Age,
-                    Bio = ac.Character.Bio,
-                    Gender = ac.Character.Gender,
-                    PicturePath = ac.Character.PicturePath
-                })
-                .ToList();
+            var characters = await _animeRelationshipsService.GetCharacters(AnimeID);
 
             if (characters.Count() == 0 || characters == null)
             {
@@ -44,10 +41,10 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
             return Ok(characters);
         }
 
-        [HttpPost("{AnimeID}")]
-        public async Task<ActionResult> CreateCharacterToAnime(int AnimeID, Models.Main.DTO.Character_Model.CharacterVM model)
+        [HttpPost("{animeID}")]
+        public async Task<ActionResult> CreateCharacterToAnime(int animeID, CharacterVM model)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
             if (anime == null)
             {
                 return NotFound("No anime was found");
@@ -58,77 +55,52 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
                 return BadRequest(ModelState);
             }
 
-            var character = new Character
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio
-            };
+            string response = await _animeRelationshipsService.CreateCharacterToAnime(model, animeID);
 
-            await _context.Characters.AddAsync(character);
-            await _context.SaveChangesAsync();
-
-            AnimeCharacter relation = new AnimeCharacter
-            {
-                CharacterID = character.ID,
-                AnimeID = AnimeID,
-            };
-
-            await _context.AnimesCharacters.AddAsync(relation);
-            await _context.SaveChangesAsync();
-
-            return Ok($"character {character.Name} was added to anime {anime.Title}");
+            return Ok(response);
         }
 
-        [HttpPost("{AnimeID},{CharacterID}")]
-        public async Task<ActionResult> AddCharacterToAnime(int AnimeID, int CharacterID)
+        [HttpPost("{animeID},{characterID}")]
+        public async Task<ActionResult> AddCharacterToAnime(int animeID, int characterID)
         {
-            var temp = await _context.AnimesCharacters.FirstOrDefaultAsync(aa => aa.AnimeID == AnimeID
-                                                                           && aa.CharacterID == CharacterID);
+            var temp = await _animeRelationshipsService.GetRelationshipCharacter(animeID, characterID);
             if (temp != null)
             {
                 return Conflict("This relationship already exists");
             }
 
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == AnimeID);
+            var anime = await _animeService.GetID(animeID);
+
             if (anime == null)
             {
                 return NotFound("No anime was found");
             }
-            var character = await _context.Characters.FirstOrDefaultAsync(a => a.ID == CharacterID);
+
+            var character = await _characterService.GetByID(characterID);
+
             if (character == null)
             {
                 return NotFound("No character was found");
             }
 
-            AnimeCharacter relation = new AnimeCharacter
-            {
-                CharacterID = CharacterID,
-                AnimeID = AnimeID,
-            };
+            string response = await _animeRelationshipsService.AddCharacterToAnime(animeID, characterID);
 
-            await _context.AnimesCharacters.AddAsync(relation);
-            await _context.SaveChangesAsync();
-
-            return Ok($"character {character.Name} was added to anime {anime.Title}");
+            return Ok(response);
         }
 
-        [HttpDelete("{AnimeID},{CharacterID}")]
-        public async Task<ActionResult> RemoveRelationship(int AnimeID, int CharacterID)
+        [HttpDelete("{animeID},{characterID}")]
+        public async Task<ActionResult> RemoveRelationship(int animeID, int characterID)
         {
-            var relation = await _context.AnimesCharacters.FirstOrDefaultAsync(aa => aa.AnimeID == AnimeID
-                                                                               && aa.CharacterID == CharacterID);
+            var relation = await _animeRelationshipsService.GetRelationshipCharacter(animeID, characterID);
+
             if (relation == null)
             {
                 return NotFound("No relationship of this kind");
             }
 
-            _context.AnimesCharacters.Remove(relation);
-            await _context.SaveChangesAsync();
+            string response = await _animeRelationshipsService.RemoveRelationshipCharacter(relation);
 
-            return Ok("Relationship deleted successfully");
+            return Ok(response);
         }
     }
 }
