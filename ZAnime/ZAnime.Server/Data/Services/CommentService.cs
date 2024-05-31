@@ -24,9 +24,9 @@ namespace Zanime.Server.Data.Services
             return (comments);
         }
 
-        public async Task<Comment> GetByID(int CommentID)
+        public async Task<Comment> GetID(int commentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == commentID);
             return (comment);
         }
 
@@ -44,10 +44,10 @@ namespace Zanime.Server.Data.Services
             return (comments);
         }
 
-        public List<CommentVM>? GetUserComments(string UserID)
+        public List<CommentVM>? GetUserComments(string userID)
         {
             var comments = _context.Comments
-                .Where(c => c.UserId == UserID)
+                .Where(c => c.UserId == userID)
                 .Select(c => new CommentVM
                 {
                     Content = c.Content,
@@ -82,9 +82,9 @@ namespace Zanime.Server.Data.Services
             return (response);
         }
 
-        public async Task<Comment> Put(CommentUpdateVM model, int CommentID)
+        public async Task<Comment> Put(CommentUpdateVM model, int commentID)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == CommentID);
+            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.ID == commentID);
 
             comment.Content = model.Content;
 

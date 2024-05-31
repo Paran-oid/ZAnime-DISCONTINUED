@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Zanime.Server.Models.Main.Attributes;
 
 namespace Zanime.Server.Models.Main.DTO.Anime_Model
 {
@@ -10,6 +11,7 @@ namespace Zanime.Server.Models.Main.DTO.Anime_Model
         [Required(ErrorMessage = "ReleaseDate is required")]
         public DateOnly ReleaseDate { get; set; }
 
+        [DateValidationAnime]
         public DateOnly? EndDate { get; set; } = null;
 
         [Required(ErrorMessage = "PicturePath is required")]

@@ -72,7 +72,7 @@ namespace Zanime.Server.Controllers.Relationship_Controllers
                 return NotFound("This anime wasn't found");
             }
 
-            var genre = await _genreService.GetByID(genreID);
+            var genre = await _genreService.GetID(genreID);
 
             if (genre == null)
             {

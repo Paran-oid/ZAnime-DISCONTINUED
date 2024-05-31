@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using Zanime.Server.Models.Main.Attributes;
 using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Models.Main
@@ -15,6 +17,7 @@ namespace Zanime.Server.Models.Main
         [Required(ErrorMessage = "ReleaseDate is required")]
         public DateOnly ReleaseDate { get; set; }
 
+        [DateValidationAnime]
         public DateOnly? EndDate { get; set; } = null;
 
         [Required(ErrorMessage = "PicturePath is required")]

@@ -8,9 +8,9 @@ namespace Zanime.Server.Data.Services.Interfaces
     {
         public Task<IEnumerable<Genre>> GetAll();
 
-        public Task<Genre> GetByID(int genreID);
+        public Task<Genre> GetID(int genreID);
 
-        public Task<Genre> GetByName(string name);
+        public Task<Genre> GetbyName(string name);
 
         public Task<Genre> Post(GenreVM model);
 

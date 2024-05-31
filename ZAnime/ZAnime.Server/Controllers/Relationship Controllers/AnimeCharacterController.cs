@@ -76,7 +76,7 @@ namespace Zanime.Server.Controllers.Multiple_Interactions
                 return NotFound("No anime was found");
             }
 
-            var character = await _characterService.GetByID(characterID);
+            var character = await _characterService.GetID(characterID);
 
             if (character == null)
             {

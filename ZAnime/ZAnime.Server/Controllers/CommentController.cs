@@ -37,7 +37,7 @@ namespace Zanime.Server.Controllers
         [HttpGet("{CommentID}")]
         public async Task<ActionResult<CommentVMDisplay>> Get(int CommentID)
         {
-            var comment = await _commentService.GetByID(CommentID);
+            var comment = await _commentService.GetID(CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -93,7 +93,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{CommentID}")]
         public async Task<ActionResult<Comment>> Put(CommentUpdateVM model, int CommentID)
         {
-            var comment = await _commentService.GetByID(CommentID);
+            var comment = await _commentService.GetID(CommentID);
             if (comment == null)
             {
                 return NotFound("No comment was found");
@@ -112,7 +112,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{CommentID}")]
         public async Task<ActionResult> LikeComment(int CommentID)
         {
-            var comment = await _commentService.GetByID(CommentID);
+            var comment = await _commentService.GetID(CommentID);
             if (comment == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{CommentID}")]
         public async Task<ActionResult> DislikeComment(int CommentID)
         {
-            var comment = await _commentService.GetByID(CommentID);
+            var comment = await _commentService.GetID(CommentID);
 
             if (comment == null)
             {
@@ -142,7 +142,7 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{CommentID}")]
         public async Task<ActionResult<string>> Delete(int CommentID)
         {
-            var comment = await _commentService.GetByID(CommentID);
+            var comment = await _commentService.GetID(CommentID);
 
             if (comment == null)
             {

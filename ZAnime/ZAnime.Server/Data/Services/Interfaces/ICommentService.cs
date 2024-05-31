@@ -8,15 +8,15 @@ namespace Zanime.Server.Data.Services.Interfaces
     {
         public Task<List<Comment>> GetAll();
 
-        public Task<Comment> GetByID(int CharacterID);
+        public Task<Comment> GetID(int characterID);
 
         public List<CommentVMDisplay> Display(List<Comment> model);
 
-        public List<CommentVM>? GetUserComments(string UserID);
+        public List<CommentVM>? GetUserComments(string userID);
 
         public Task<CommentVMDisplay> Post(CommentVM model, string userID, int animeID);
 
-        public Task<Comment> Put(CommentUpdateVM model, int CommentID);
+        public Task<Comment> Put(CommentUpdateVM model, int commentID);
 
         public Task<string> Delete(Comment model);
 

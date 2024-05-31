@@ -60,7 +60,7 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await _animeService.GetByTitle(model.Title) != null)
+            if (await _animeService.GetbyTitle(model.Title) != null)
             {
                 return Conflict("Anime with this title already exists");
             }

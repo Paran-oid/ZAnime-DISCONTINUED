@@ -10,7 +10,7 @@ namespace Zanime.Server.Data.Services.Interfaces
 
         public Task<Anime> GetID(int animeID);
 
-        public Task<Anime> GetByTitle(string title);
+        public Task<Anime> GetbyTitle(string title);
 
         public Task<IEnumerable<CommentAnimeVM>> GetComments(int animeID);
 

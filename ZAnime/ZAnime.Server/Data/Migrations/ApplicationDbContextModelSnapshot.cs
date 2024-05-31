@@ -301,7 +301,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actors", (string)null);
 
                     b.HasData(
                         new
@@ -366,7 +366,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Animes");
+                    b.ToTable("Animes", (string)null);
 
                     b.HasData(
                         new
@@ -430,7 +430,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Characters");
+                    b.ToTable("Characters", (string)null);
 
                     b.HasData(
                         new
@@ -485,7 +485,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
 
                     b.HasData(
                         new
@@ -523,7 +523,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
 
                     b.HasData(
                         new
@@ -550,7 +550,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("CharacterID");
 
-                    b.ToTable("ActorCharacters");
+                    b.ToTable("ActorCharacters", (string)null);
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeActor", b =>
@@ -565,7 +565,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesActors");
+                    b.ToTable("AnimesActors", (string)null);
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
@@ -580,7 +580,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesCharacters");
+                    b.ToTable("AnimesCharacters", (string)null);
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
@@ -595,7 +595,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesGenres");
+                    b.ToTable("AnimesGenres", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

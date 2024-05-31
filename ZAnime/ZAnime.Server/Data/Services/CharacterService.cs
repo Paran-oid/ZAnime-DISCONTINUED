@@ -20,13 +20,13 @@ namespace Zanime.Server.Data.Services
             return (characters);
         }
 
-        public async Task<Character> GetByID(int CharacterID)
+        public async Task<Character> GetID(int characterID)
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == CharacterID);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == characterID);
             return (character);
         }
 
-        public async Task<Character> GetByName(string Name)
+        public async Task<Character> GetbyName(string Name)
         {
             var character = await _context.Characters.FirstOrDefaultAsync(c => c.Name == Name);
             return (character);

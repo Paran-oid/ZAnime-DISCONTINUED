@@ -37,7 +37,7 @@ namespace Zanime.Server.Controllers
         [HttpGet("{ID}")]
         public async Task<ActionResult<Genre>> Get(int ID)
         {
-            var genre = await _genreService.GetByID(ID);
+            var genre = await _genreService.GetID(ID);
 
             if (genre == null)
             {
@@ -55,7 +55,7 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await _genreService.GetByName(model.Name) != null)
+            if (await _genreService.GetbyName(model.Name) != null)
             {
                 return Conflict("This genre already exists");
             }
@@ -68,7 +68,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{genreID}")]
         public async Task<ActionResult<GenreVM>> Put(GenreVM model, int genreID)
         {
-            var genre = await _genreService.GetByID(genreID);
+            var genre = await _genreService.GetID(genreID);
 
             if (genre == null)
             {
@@ -88,7 +88,7 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{genreID}")]
         public async Task<ActionResult<string>> Delete(int genreID)
         {
-            var genre = await _genreService.GetByID(genreID);
+            var genre = await _genreService.GetID(genreID);
 
             if (genre == null)
             {

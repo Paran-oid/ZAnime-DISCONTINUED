@@ -20,13 +20,13 @@ namespace Zanime.Server.Data.Services
             return (genres);
         }
 
-        public async Task<Genre> GetByID(int genreID)
+        public async Task<Genre> GetID(int genreID)
         {
             var genre = await _context.Genres.FirstOrDefaultAsync(g => g.ID == genreID);
             return (genre);
         }
 
-        public async Task<Genre> GetByName(string name)
+        public async Task<Genre> GetbyName(string name)
         {
             var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == name);
             return (genre);

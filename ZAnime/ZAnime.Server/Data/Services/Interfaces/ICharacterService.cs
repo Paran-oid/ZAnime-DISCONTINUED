@@ -8,9 +8,9 @@ namespace Zanime.Server.Data.Services.Interfaces
     {
         public Task<IEnumerable<Character>> GetAll();
 
-        public Task<Character> GetByID(int characterID);
+        public Task<Character> GetID(int characterID);
 
-        public Task<Character> GetByName(string Name);
+        public Task<Character> GetbyName(string name);
 
         public Task<Character> Post(CharacterVM model);
 

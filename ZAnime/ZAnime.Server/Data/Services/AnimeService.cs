@@ -39,7 +39,7 @@ namespace Zanime.Server.Data.Services
             return (anime);
         }
 
-        public async Task<Anime> GetByTitle(string title)
+        public async Task<Anime> GetbyTitle(string title)
         {
             var anime = await _context.Animes.FirstOrDefaultAsync(a => a.Title == title);
 

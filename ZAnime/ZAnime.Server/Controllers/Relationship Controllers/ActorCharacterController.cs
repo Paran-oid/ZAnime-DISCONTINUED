@@ -95,12 +95,12 @@ namespace Zanime.Server.Controllers
         [HttpPost("{actorID},{characterID}")]
         public async Task<ActionResult<string>> AddActorToCharacter(int actorID, int characterID)
         {
-            var actor = await _actorService.GetByID(actorID);
+            var actor = await _actorService.GetID(actorID);
             if (actor == null)
             {
                 return NotFound("no actor was found");
             }
-            var character = await _characterService.GetByID(characterID);
+            var character = await _characterService.GetID(characterID);
             if (character == null)
             {
                 return NotFound("no character was found");

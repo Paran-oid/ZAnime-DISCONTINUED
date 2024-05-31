@@ -29,7 +29,7 @@ namespace Zanime.Server.Controllers
         [HttpGet("{ActorID}")]
         public async Task<ActionResult<Actor>> Get(int ActorID)
         {
-            var actor = await _actorService.GetByID(ActorID);
+            var actor = await _actorService.GetID(ActorID);
 
             if (actor == null)
             {
@@ -47,7 +47,7 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var temp = await _actorService.GetByName(model.Name);
+            var temp = await _actorService.GetbyName(model.Name);
 
             if (temp != null)
             {
@@ -75,7 +75,7 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{ActorID}")]
         public async Task<ActionResult<string>> Delete(int ActorID)
         {
-            var actor = await _actorService.GetByID(ActorID);
+            var actor = await _actorService.GetID(ActorID);
 
             if (actor == null)
             {

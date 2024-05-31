@@ -29,7 +29,7 @@ namespace Zanime.Server.Controllers
         [HttpGet("{CharacterID}")]
         public async Task<ActionResult<Character>> Get(int CharacterID)
         {
-            var character = await _characterService.GetByID(CharacterID);
+            var character = await _characterService.GetID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
@@ -45,7 +45,7 @@ namespace Zanime.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var temp = await _characterService.GetByName(model.Name);
+            var temp = await _characterService.GetbyName(model.Name);
 
             if (temp != null)
             {
@@ -60,7 +60,7 @@ namespace Zanime.Server.Controllers
         [HttpPut("{CharacterID}")]
         public async Task<ActionResult<Character>> Put(CharacterVM model, int CharacterID)
         {
-            var character = await _characterService.GetByID(CharacterID);
+            var character = await _characterService.GetID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
@@ -74,7 +74,7 @@ namespace Zanime.Server.Controllers
         [HttpDelete("{CharacterID}")]
         public async Task<ActionResult<string>> Delete(int CharacterID)
         {
-            var character = await _characterService.GetByID(CharacterID);
+            var character = await _characterService.GetID(CharacterID);
             if (character == null)
             {
                 return NotFound("No character was found");
