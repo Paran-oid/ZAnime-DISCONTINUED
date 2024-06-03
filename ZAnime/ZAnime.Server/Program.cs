@@ -7,11 +7,18 @@ using Zanime.Server.Data.Services;
 using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Data.Services.Interfaces.Relationships;
 using Zanime.Server.Data.Services.Relationships;
+using Zanime.Server.Filters;
 using Zanime.Server.Models.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    //This is how to add filters to the program after creating them
+    options.Filters.Add(new MyLogFilter());
+});
+
+builder.Services.AddLogging();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
