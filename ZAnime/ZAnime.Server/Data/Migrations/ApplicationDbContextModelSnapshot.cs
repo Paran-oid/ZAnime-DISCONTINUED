@@ -175,10 +175,12 @@ namespace Zanime.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Fname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Lname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -234,14 +236,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3376fb2d-f3aa-42db-91b9-b59a4cae1c17",
+                            ConcurrencyStamp = "60052599-33c1-4ebc-80f3-3768b133dd5f",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "8b60648e-2b5e-4130-955b-6a855d2d3368",
+                            SecurityStamp = "6c7a3e0d-d861-4a6e-b527-ee115d7b6d9d",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -249,14 +251,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fd94fdd7-ed07-4689-9cb6-2db6c7643c9b",
+                            ConcurrencyStamp = "11470131-7aab-476e-b4ba-316703558fd2",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "0045cf3c-3ad4-4b19-8e77-0d9a6035a8c7",
+                            SecurityStamp = "736b04b2-4aea-46fd-a00b-d8ef520726fa",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -301,7 +303,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors", "anm");
 
                     b.HasData(
                         new
@@ -366,7 +368,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Animes", (string)null);
+                    b.ToTable("Animes", "anm");
 
                     b.HasData(
                         new
@@ -430,7 +432,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Characters", (string)null);
+                    b.ToTable("Characters", "anm");
 
                     b.HasData(
                         new
@@ -485,7 +487,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments", "anm");
 
                     b.HasData(
                         new
@@ -523,7 +525,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres", "anm");
 
                     b.HasData(
                         new
@@ -550,7 +552,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("CharacterID");
 
-                    b.ToTable("ActorCharacters", (string)null);
+                    b.ToTable("ActorCharacters", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeActor", b =>
@@ -565,7 +567,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesActors", (string)null);
+                    b.ToTable("AnimeActors", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
@@ -580,7 +582,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesCharacters", (string)null);
+                    b.ToTable("AnimeCharacters", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
@@ -595,7 +597,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesGenres", (string)null);
+                    b.ToTable("ActorGenres", "anr");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

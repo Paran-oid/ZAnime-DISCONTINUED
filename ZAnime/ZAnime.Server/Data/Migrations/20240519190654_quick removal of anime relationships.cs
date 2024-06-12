@@ -11,7 +11,7 @@ namespace Zanime.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AnimesCharacters");
+                name: "AnimeCharacters");
 
             migrationBuilder.DropTable(
                 name: "AnimesComments");
@@ -35,7 +35,7 @@ namespace Zanime.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AnimesCharacters",
+                name: "AnimeCharacters",
                 columns: table => new
                 {
                     CharacterID = table.Column<int>(type: "int", nullable: false),
@@ -43,15 +43,15 @@ namespace Zanime.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnimesCharacters", x => new { x.CharacterID, x.AnimeID });
+                    table.PrimaryKey("PK_AnimeCharacters", x => new { x.CharacterID, x.AnimeID });
                     table.ForeignKey(
-                        name: "FK_AnimesCharacters_Animes_AnimeID",
+                        name: "FK_AnimeCharacters_Animes_AnimeID",
                         column: x => x.AnimeID,
                         principalTable: "Animes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AnimesCharacters_Characters_CharacterID",
+                        name: "FK_AnimeCharacters_Characters_CharacterID",
                         column: x => x.CharacterID,
                         principalTable: "Characters",
                         principalColumn: "ID",
@@ -97,8 +97,8 @@ namespace Zanime.Server.Migrations
                 values: new object[] { "6533d40d-b02c-48cc-884b-7aa9cd3d8781", "73bf2e60-bb49-4f3e-b868-42c334727646" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnimesCharacters_AnimeID",
-                table: "AnimesCharacters",
+                name: "IX_AnimeCharacters_AnimeID",
+                table: "AnimeCharacters",
                 column: "AnimeID");
 
             migrationBuilder.CreateIndex(

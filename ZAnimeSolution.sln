@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zanime.Server", "ZAnime\ZAnime.Server\Zanime.Server.csproj", "{3556158F-22A4-4857-8DEA-784073EE18F2}"
-EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ZAnime.Client", "ZAnime\zanime.client\ZAnime.Client.esproj", "{1AB79A89-61F9-4F07-B644-65B330AA9E9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zanime.Server", "ZAnime\ZAnime.Server\Zanime.Server.csproj", "{DC383BC1-E2CF-415A-A378-072B5B47A895}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3556158F-22A4-4857-8DEA-784073EE18F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3556158F-22A4-4857-8DEA-784073EE18F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3556158F-22A4-4857-8DEA-784073EE18F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3556158F-22A4-4857-8DEA-784073EE18F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AB79A89-61F9-4F07-B644-65B330AA9E9F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

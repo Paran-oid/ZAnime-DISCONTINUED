@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -7,6 +8,7 @@ using Zanime.Server.Models.Main.Relationships;
 
 namespace Zanime.Server.Models.Main
 {
+    [Table("Animes", Schema = "anm")]
     public class Anime
     {
         public int ID { get; set; }

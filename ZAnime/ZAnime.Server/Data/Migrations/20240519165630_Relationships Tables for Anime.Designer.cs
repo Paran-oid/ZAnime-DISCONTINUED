@@ -524,7 +524,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesActors");
+                    b.ToTable("AnimeActors");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>

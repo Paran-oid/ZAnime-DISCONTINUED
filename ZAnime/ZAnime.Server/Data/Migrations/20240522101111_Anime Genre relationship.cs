@@ -15,7 +15,7 @@ namespace Zanime.Server.Migrations
                 table: "Animes");
 
             migrationBuilder.CreateTable(
-                name: "AnimesGenres",
+                name: "AnimeGenres",
                 columns: table => new
                 {
                     AnimeID = table.Column<int>(type: "int", nullable: false),
@@ -23,15 +23,15 @@ namespace Zanime.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnimesGenres", x => new { x.GenreID, x.AnimeID });
+                    table.PrimaryKey("PK_AnimeGenres", x => new { x.GenreID, x.AnimeID });
                     table.ForeignKey(
-                        name: "FK_AnimesGenres_Animes_AnimeID",
+                        name: "FK_AnimeGenres_Animes_AnimeID",
                         column: x => x.AnimeID,
                         principalTable: "Animes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AnimesGenres_Genres_GenreID",
+                        name: "FK_AnimeGenres_Genres_GenreID",
                         column: x => x.GenreID,
                         principalTable: "Genres",
                         principalColumn: "ID",
@@ -53,8 +53,8 @@ namespace Zanime.Server.Migrations
                 values: new object[] { "d6b2f1e3-e1f0-433f-96c3-7d93ce11b32e", "c1bb81f1-f667-4415-aa53-5486366550a2" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnimesGenres_AnimeID",
-                table: "AnimesGenres",
+                name: "IX_AnimeGenres_AnimeID",
+                table: "AnimeGenres",
                 column: "AnimeID");
         }
 
@@ -62,7 +62,7 @@ namespace Zanime.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AnimesGenres");
+                name: "AnimeGenres");
 
             migrationBuilder.AddColumn<string>(
                 name: "Genre",

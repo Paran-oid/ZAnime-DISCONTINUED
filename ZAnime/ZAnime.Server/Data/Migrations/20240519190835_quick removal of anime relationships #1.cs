@@ -11,7 +11,7 @@ namespace Zanime.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AnimesCharacters",
+                name: "AnimeCharacters",
                 columns: table => new
                 {
                     AnimeID = table.Column<int>(type: "int", nullable: false),
@@ -19,15 +19,15 @@ namespace Zanime.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnimesCharacters", x => new { x.CharacterID, x.AnimeID });
+                    table.PrimaryKey("PK_AnimeCharacters", x => new { x.CharacterID, x.AnimeID });
                     table.ForeignKey(
-                        name: "FK_AnimesCharacters_Animes_AnimeID",
+                        name: "FK_AnimeCharacters_Animes_AnimeID",
                         column: x => x.AnimeID,
                         principalTable: "Animes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AnimesCharacters_Characters_CharacterID",
+                        name: "FK_AnimeCharacters_Characters_CharacterID",
                         column: x => x.CharacterID,
                         principalTable: "Characters",
                         principalColumn: "ID",
@@ -73,8 +73,8 @@ namespace Zanime.Server.Migrations
                 values: new object[] { "42818316-2c0f-4226-8d9c-c17ac78866ad", "6e2dd729-2832-4170-8749-c9f62816b59e" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnimesCharacters_AnimeID",
-                table: "AnimesCharacters",
+                name: "IX_AnimeCharacters_AnimeID",
+                table: "AnimeCharacters",
                 column: "AnimeID");
 
             migrationBuilder.CreateIndex(
@@ -87,7 +87,7 @@ namespace Zanime.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AnimesCharacters");
+                name: "AnimeCharacters");
 
             migrationBuilder.DropTable(
                 name: "AnimesComments");

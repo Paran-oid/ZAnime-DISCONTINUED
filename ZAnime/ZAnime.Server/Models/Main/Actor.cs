@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zanime.Server.Models.Main.Relationships;
 using Zanime.Server.Models.Main.Attributes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zanime.Server.Models.Main
 {
+    [Table("Actors", Schema = "anm")]
     public class Actor
     {
         public int ID { get; set; }

@@ -93,7 +93,6 @@ namespace Zanime.Server.Data
                 .WithMany(ac => ac.Comments)
                 .HasForeignKey(ac => ac.AnimeID);
 
-
             //ANIMES AND GENRES M:M
             builder.Entity<AnimeGenre>()
                 .HasKey(ag => new { ag.GenreID, ag.AnimeID });
@@ -131,8 +130,8 @@ namespace Zanime.Server.Data
             );
 
             builder.Entity<Comment>().HasData(
-                new Comment { ID = 1, Content = "Great performance by Tom Hanks in Forrest Gump!", Likes = 10,AnimeID = 1, UserId = "1" },
-                new Comment { ID = 2, Content = "Attack on Titan is an intense and gripping anime.", Likes = 20, AnimeID = 2 ,UserId = "2" }
+                new Comment { ID = 1, Content = "Great performance by Tom Hanks in Forrest Gump!", Likes = 10, AnimeID = 1, UserId = "1" },
+                new Comment { ID = 2, Content = "Attack on Titan is an intense and gripping anime.", Likes = 20, AnimeID = 2, UserId = "2" }
             );
 
             builder.Entity<Genre>().HasData(
@@ -148,9 +147,9 @@ namespace Zanime.Server.Data
         //ANIME W RELATIONSHIPS 4 ANIME
         public DbSet<Anime> Animes { get; set; }
 
-        public DbSet<AnimeActor> AnimesActors { get; set; }
-        public DbSet<AnimeCharacter> AnimesCharacters { get; set; }
-        public DbSet<AnimeGenre> AnimesGenres { get; set; }
+        public DbSet<AnimeActor> AnimeActors { get; set; }
+        public DbSet<AnimeCharacter> AnimeCharacters { get; set; }
+        public DbSet<AnimeGenre> AnimeGenres { get; set; }
 
         //CHARACTER
         public DbSet<Character> Characters { get; set; }

@@ -20,7 +20,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<AnimeActor> GetRelationshipActor(int animeID, int actorID)
         {
-            var relationship = await _context.AnimesActors.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
+            var relationship = await _context.AnimeActors.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
                                                                                && aa.ActorID == actorID);
 
             return (relationship);
@@ -28,7 +28,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<AnimeCharacter> GetRelationshipCharacter(int animeID, int characterID)
         {
-            var relationship = await _context.AnimesCharacters.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
+            var relationship = await _context.AnimeCharacters.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
                                                                    && aa.CharacterID == characterID);
 
             return (relationship);
@@ -36,7 +36,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<AnimeGenre> GetRelationshipGenre(int animeID, int genreID)
         {
-            var relationship = await _context.AnimesGenres.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
+            var relationship = await _context.AnimeGenres.FirstOrDefaultAsync(aa => aa.AnimeID == animeID
                                                                                && aa.GenreID == genreID);
 
             return (relationship);
@@ -44,7 +44,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<IEnumerable<ActorVM>> GetActors(int animeID)
         {
-            var actors = await _context.AnimesActors
+            var actors = await _context.AnimeActors
                 .Include(aa => aa.Actor)
                 .Where(aa => aa.AnimeID == animeID)
                 .Select(aa => new ActorVM
@@ -62,7 +62,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<IEnumerable<CharacterVM>> GetCharacters(int animeID)
         {
-            var characters = await _context.AnimesCharacters
+            var characters = await _context.AnimeCharacters
                 .Include(aa => aa.Character)
                 .Where(aa => aa.AnimeID == animeID)
                 .Select(aa => new CharacterVM
@@ -80,7 +80,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<IEnumerable<GenreVM>> GetGenres(int animeID)
         {
-            var genres = await _context.AnimesGenres
+            var genres = await _context.AnimeGenres
                     .Include(aa => aa.Genre)
                     .Where(aa => aa.AnimeID == animeID)
                     .Select(aa => new GenreVM
@@ -112,7 +112,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 AnimeID = animeID,
             };
 
-            await _context.AnimesActors.AddAsync(relation);
+            await _context.AnimeActors.AddAsync(relation);
             await _context.SaveChangesAsync();
 
             string response = "relationship created";
@@ -128,7 +128,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 Age = model.Age,
                 Gender = model.Gender,
                 PicturePath = model.PicturePath,
-                Bio = model.Bio,
+                Bio = model.Bio
             };
 
             await _context.Characters.AddAsync(character);
@@ -140,7 +140,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 AnimeID = animeID,
             };
 
-            await _context.AnimesCharacters.AddAsync(relation);
+            await _context.AnimeCharacters.AddAsync(relation);
             await _context.SaveChangesAsync();
 
             string response = "relationship created";
@@ -164,7 +164,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 GenreID = genre.ID,
             };
 
-            await _context.AnimesGenres.AddAsync(relation);
+            await _context.AnimeGenres.AddAsync(relation);
             await _context.SaveChangesAsync();
 
             string response = "relationship created";
@@ -180,7 +180,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 AnimeID = animeID,
             };
 
-            await _context.AnimesActors.AddAsync(relation);
+            await _context.AnimeActors.AddAsync(relation);
             await _context.SaveChangesAsync();
 
             string response = "relationship created";
@@ -196,7 +196,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 AnimeID = animeID,
             };
 
-            await _context.AnimesCharacters.AddAsync(relation);
+            await _context.AnimeCharacters.AddAsync(relation);
             await _context.SaveChangesAsync();
 
             string response = "relationship created";
@@ -212,7 +212,7 @@ namespace Zanime.Server.Data.Services.Relationships
                 GenreID = genreID
             };
 
-            await _context.AnimesGenres.AddAsync(relationship);
+            await _context.AnimeGenres.AddAsync(relationship);
             await _context.SaveChangesAsync();
 
             string response = "Relationship created";
@@ -222,7 +222,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> RemoveRelationshipActor(AnimeActor relationship)
         {
-            _context.AnimesActors.Remove(relationship);
+            _context.AnimeActors.Remove(relationship);
             await _context.SaveChangesAsync();
 
             string response = "Record deleted";
@@ -232,7 +232,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> RemoveRelationshipCharacter(AnimeCharacter relationship)
         {
-            _context.AnimesCharacters.Remove(relationship);
+            _context.AnimeCharacters.Remove(relationship);
             await _context.SaveChangesAsync();
 
             string response = "Record deleted";
@@ -242,7 +242,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> RemoveRelationshipGenre(AnimeGenre relationship)
         {
-            _context.AnimesGenres.Remove(relationship);
+            _context.AnimeGenres.Remove(relationship);
             await _context.SaveChangesAsync();
 
             string response = "Record deleted";

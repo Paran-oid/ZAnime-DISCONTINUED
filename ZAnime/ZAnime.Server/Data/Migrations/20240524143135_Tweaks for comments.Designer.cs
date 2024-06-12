@@ -566,7 +566,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesActors");
+                    b.ToTable("AnimeActors");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
@@ -581,7 +581,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesCharacters");
+                    b.ToTable("AnimeCharacters");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
@@ -596,7 +596,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimesGenres");
+                    b.ToTable("AnimeGenres");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

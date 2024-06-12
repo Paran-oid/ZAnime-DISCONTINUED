@@ -56,7 +56,7 @@ namespace Zanime.Server.Migrations
 
             migrationBuilder.RenameTable(
                 name: "AnimeActor",
-                newName: "AnimesActors");
+                newName: "AnimeActors");
 
             migrationBuilder.RenameIndex(
                 name: "IX_AnimeComment_AnimeID",
@@ -70,8 +70,8 @@ namespace Zanime.Server.Migrations
 
             migrationBuilder.RenameIndex(
                 name: "IX_AnimeActor_AnimeID",
-                table: "AnimesActors",
-                newName: "IX_AnimesActors_AnimeID");
+                table: "AnimeActors",
+                newName: "IX_AnimeActors_AnimeID");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_animeComments",
@@ -84,8 +84,8 @@ namespace Zanime.Server.Migrations
                 columns: new[] { "CharacterID", "AnimeID" });
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_AnimesActors",
-                table: "AnimesActors",
+                name: "PK_AnimeActors",
+                table: "AnimeActors",
                 columns: new[] { "ActorID", "AnimeID" });
 
             migrationBuilder.UpdateData(
@@ -135,16 +135,16 @@ namespace Zanime.Server.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AnimesActors_Actors_ActorID",
-                table: "AnimesActors",
+                name: "FK_AnimeActors_Actors_ActorID",
+                table: "AnimeActors",
                 column: "ActorID",
                 principalTable: "Actors",
                 principalColumn: "ID",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AnimesActors_Animes_AnimeID",
-                table: "AnimesActors",
+                name: "FK_AnimeActors_Animes_AnimeID",
+                table: "AnimeActors",
                 column: "AnimeID",
                 principalTable: "Animes",
                 principalColumn: "ID",
@@ -171,16 +171,16 @@ namespace Zanime.Server.Migrations
                 table: "animeComments");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AnimesActors_Actors_ActorID",
-                table: "AnimesActors");
+                name: "FK_AnimeActors_Actors_ActorID",
+                table: "AnimeActors");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AnimesActors_Animes_AnimeID",
-                table: "AnimesActors");
+                name: "FK_AnimeActors_Animes_AnimeID",
+                table: "AnimeActors");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_AnimesActors",
-                table: "AnimesActors");
+                name: "PK_AnimeActors",
+                table: "AnimeActors");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_animeComments",
@@ -191,7 +191,7 @@ namespace Zanime.Server.Migrations
                 table: "animeCharacters");
 
             migrationBuilder.RenameTable(
-                name: "AnimesActors",
+                name: "AnimeActors",
                 newName: "AnimeActor");
 
             migrationBuilder.RenameTable(
@@ -203,7 +203,7 @@ namespace Zanime.Server.Migrations
                 newName: "AnimeCharacter");
 
             migrationBuilder.RenameIndex(
-                name: "IX_AnimesActors_AnimeID",
+                name: "IX_AnimeActors_AnimeID",
                 table: "AnimeActor",
                 newName: "IX_AnimeActor_AnimeID");
 

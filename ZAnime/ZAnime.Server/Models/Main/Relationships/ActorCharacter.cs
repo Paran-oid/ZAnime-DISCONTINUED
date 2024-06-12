@@ -1,5 +1,8 @@
-﻿namespace Zanime.Server.Models.Main.Relationships
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Zanime.Server.Models.Main.Relationships
 {
+    [Table("ActorCharacters", Schema = "anr")]
     public class ActorCharacter
     {
         public int ActorID { get; set; }

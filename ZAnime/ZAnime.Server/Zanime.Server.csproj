@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Enums\**" />
+    <Compile Remove="Utilities\Programs\**" />
+    <Content Remove="Data\Enums\**" />
+    <Content Remove="Utilities\Programs\**" />
+    <EmbeddedResource Remove="Data\Enums\**" />
+    <EmbeddedResource Remove="Utilities\Programs\**" />
+    <None Remove="Data\Enums\**" />
+    <None Remove="Utilities\Programs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>8.*-*</Version>
     </PackageReference>
@@ -35,11 +46,6 @@
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Enums\" />
-    <Folder Include="Utilities\Programs\" />
   </ItemGroup>
 
 </Project>
