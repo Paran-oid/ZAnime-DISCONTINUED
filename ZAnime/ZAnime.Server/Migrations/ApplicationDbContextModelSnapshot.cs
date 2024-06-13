@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zanime.Server.Data;
 
@@ -12,11 +11,9 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240519190654_quick removal of anime relationships")]
-    partial class quickremovalofanimerelationships
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,10 +175,12 @@ namespace Zanime.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Fname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Lname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -237,14 +236,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a85e5a59-cd54-44c2-bc35-817c36e24714",
+                            ConcurrencyStamp = "206fb4ff-a5c7-4267-b590-98fb4963c22a",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "b9b74780-671a-425a-8a9d-798e03b09d84",
+                            SecurityStamp = "32a4039a-987b-422f-b9f2-0da2e5ac89e7",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -252,14 +251,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8c3fe90e-4435-4b4f-9a47-b52723b447b5",
+                            ConcurrencyStamp = "0b9dd997-f89e-49f6-91a4-e822c1f848a5",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "855f9a15-35b8-44ae-8a26-24ff0e18c67d",
+                            SecurityStamp = "9aaf9cdd-c608-4046-9ca8-2e91f670961e",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -292,7 +291,8 @@ namespace Zanime.Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PicturePath")
                         .IsRequired()
@@ -300,7 +300,10 @@ namespace Zanime.Server.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Actors");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Actors", "anm");
 
                     b.HasData(
                         new
@@ -346,27 +349,26 @@ namespace Zanime.Server.Migrations
                     b.Property<DateOnly?>("EndDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PicturePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Animes");
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.ToTable("Animes", "anm");
 
                     b.HasData(
                         new
@@ -374,9 +376,8 @@ namespace Zanime.Server.Migrations
                             ID = 1,
                             BackgroundPath = "none",
                             Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.",
-                            Genre = "Action, Drama, Fantasy",
                             PicturePath = "/images/attack_on_titan.jpg",
-                            Rating = 0f,
+                            Rating = 0.0,
                             ReleaseDate = new DateOnly(2013, 4, 7),
                             Title = "Attack on Titan"
                         },
@@ -385,9 +386,8 @@ namespace Zanime.Server.Migrations
                             ID = 2,
                             BackgroundPath = "none",
                             Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.",
-                            Genre = "Action, Comedy, Superhero",
                             PicturePath = "/images/my_hero_academia.jpg",
-                            Rating = 0f,
+                            Rating = 0.0,
                             ReleaseDate = new DateOnly(2016, 4, 3),
                             Title = "My Hero Academia"
                         });
@@ -420,7 +420,8 @@ namespace Zanime.Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PicturePath")
                         .IsRequired()
@@ -428,7 +429,10 @@ namespace Zanime.Server.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Characters");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Characters", "anm");
 
                     b.HasData(
                         new
@@ -463,6 +467,9 @@ namespace Zanime.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("AnimeID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -476,14 +483,17 @@ namespace Zanime.Server.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("AnimeID");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", "anm");
 
                     b.HasData(
                         new
                         {
                             ID = 1,
+                            AnimeID = 1,
                             Content = "Great performance by Tom Hanks in Forrest Gump!",
                             Likes = 10,
                             UserId = "1"
@@ -491,9 +501,42 @@ namespace Zanime.Server.Migrations
                         new
                         {
                             ID = 2,
+                            AnimeID = 2,
                             Content = "Attack on Titan is an intense and gripping anime.",
                             Likes = 20,
                             UserId = "2"
+                        });
+                });
+
+            modelBuilder.Entity("Zanime.Server.Models.Main.Genre", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Genres", "anm");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "Horror"
                         });
                 });
 
@@ -509,7 +552,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("CharacterID");
 
-                    b.ToTable("ActorCharacters");
+                    b.ToTable("ActorCharacters", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeActor", b =>
@@ -524,7 +567,37 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimeActors");
+                    b.ToTable("AnimeActors", "anr");
+                });
+
+            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
+                {
+                    b.Property<int>("CharacterID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AnimeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharacterID", "AnimeID");
+
+                    b.HasIndex("AnimeID");
+
+                    b.ToTable("AnimeCharacters", "anr");
+                });
+
+            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
+                {
+                    b.Property<int>("GenreID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AnimeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenreID", "AnimeID");
+
+                    b.HasIndex("AnimeID");
+
+                    b.ToTable("ActorGenres", "anr");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -580,11 +653,19 @@ namespace Zanime.Server.Migrations
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Comment", b =>
                 {
+                    b.HasOne("Zanime.Server.Models.Main.Anime", "Anime")
+                        .WithMany("Comments")
+                        .HasForeignKey("AnimeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Zanime.Server.Models.Core.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Anime");
 
                     b.Navigation("User");
                 });
@@ -627,6 +708,44 @@ namespace Zanime.Server.Migrations
                     b.Navigation("Anime");
                 });
 
+            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
+                {
+                    b.HasOne("Zanime.Server.Models.Main.Anime", "Anime")
+                        .WithMany("AnimeCharacter")
+                        .HasForeignKey("AnimeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zanime.Server.Models.Main.Character", "Character")
+                        .WithMany("AnimeCharacter")
+                        .HasForeignKey("CharacterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Anime");
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
+                {
+                    b.HasOne("Zanime.Server.Models.Main.Anime", "Anime")
+                        .WithMany("AnimeGenre")
+                        .HasForeignKey("AnimeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zanime.Server.Models.Main.Genre", "Genre")
+                        .WithMany("AnimeGenre")
+                        .HasForeignKey("GenreID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Anime");
+
+                    b.Navigation("Genre");
+                });
+
             modelBuilder.Entity("Zanime.Server.Models.Core.User", b =>
                 {
                     b.Navigation("Comments");
@@ -642,11 +761,24 @@ namespace Zanime.Server.Migrations
             modelBuilder.Entity("Zanime.Server.Models.Main.Anime", b =>
                 {
                     b.Navigation("AnimeActor");
+
+                    b.Navigation("AnimeCharacter");
+
+                    b.Navigation("AnimeGenre");
+
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Character", b =>
                 {
                     b.Navigation("ActorCharacters");
+
+                    b.Navigation("AnimeCharacter");
+                });
+
+            modelBuilder.Entity("Zanime.Server.Models.Main.Genre", b =>
+                {
+                    b.Navigation("AnimeGenre");
                 });
 #pragma warning restore 612, 618
         }

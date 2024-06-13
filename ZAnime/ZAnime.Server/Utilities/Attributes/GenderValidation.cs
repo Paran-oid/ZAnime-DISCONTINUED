@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Zanime.Server.Models.Main.Attributes
+namespace Zanime.Server.Utilities.Attributes
 {
     //We defined the attribute
     public class GenderValidation : ValidationAttribute
@@ -21,7 +21,7 @@ namespace Zanime.Server.Models.Main.Attributes
             //If the value is null or the valid genders array doesnt contain the value the user entered ( we ignore the upper/lower cases)
             if (value == null || !_validGenders.Contains(value.ToString(), StringComparer.OrdinalIgnoreCase))
             {
-                return new ValidationResult("Invalid gender value, allowed values are " + String.Join(", ", _validGenders));
+                return new ValidationResult("Invalid gender value, allowed values are " + string.Join(", ", _validGenders));
             }
             return ValidationResult.Success;
         }

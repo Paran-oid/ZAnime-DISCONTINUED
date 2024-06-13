@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using Zanime.Server.Models.Main.Attributes;
 using Zanime.Server.Models.Main.Relationships;
+using Zanime.Server.Utilities.Attributes;
 
 namespace Zanime.Server.Models.Main
 {
@@ -23,6 +23,7 @@ namespace Zanime.Server.Models.Main
         public DateOnly? EndDate { get; set; } = null;
 
         [Required(ErrorMessage = "PicturePath is required")]
+        [PathValidation<Anime>]
         public string PicturePath { get; set; }
 
         [Required(ErrorMessage = "Title is required")]

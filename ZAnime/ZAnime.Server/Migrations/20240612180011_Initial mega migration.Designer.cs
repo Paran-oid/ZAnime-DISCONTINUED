@@ -12,8 +12,8 @@ using Zanime.Server.Data;
 namespace Zanime.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240525071948_Character and Actor Validations")]
-    partial class CharacterandActorValidations
+    [Migration("20240612180011_Initial mega migration")]
+    partial class Initialmegamigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,10 +178,12 @@ namespace Zanime.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Fname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Lname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -237,14 +239,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "abbf1a0d-b645-44dc-b623-1fa75140e7fd",
+                            ConcurrencyStamp = "206fb4ff-a5c7-4267-b590-98fb4963c22a",
                             EmailConfirmed = false,
                             Fname = "John",
                             Lname = "Doe",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile1.jpg",
-                            SecurityStamp = "9e67ca01-5045-4782-a422-3e54a81f2867",
+                            SecurityStamp = "32a4039a-987b-422f-b9f2-0da2e5ac89e7",
                             TwoFactorEnabled = false,
                             UserName = "user1@example.com"
                         },
@@ -252,14 +254,14 @@ namespace Zanime.Server.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0d74c1bf-55c6-4b3d-a1ef-15d3ad01475b",
+                            ConcurrencyStamp = "0b9dd997-f89e-49f6-91a4-e822c1f848a5",
                             EmailConfirmed = false,
                             Fname = "Jane",
                             Lname = "Smith",
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             ProfilePicturePath = "/images/profile2.jpg",
-                            SecurityStamp = "78b817ce-8ccb-4f20-b300-74220f0199f9",
+                            SecurityStamp = "9aaf9cdd-c608-4046-9ca8-2e91f670961e",
                             TwoFactorEnabled = false,
                             UserName = "user2@example.com"
                         });
@@ -304,7 +306,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actors", "anm");
 
                     b.HasData(
                         new
@@ -354,8 +356,8 @@ namespace Zanime.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("date");
@@ -369,7 +371,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Animes");
+                    b.ToTable("Animes", "anm");
 
                     b.HasData(
                         new
@@ -378,7 +380,7 @@ namespace Zanime.Server.Migrations
                             BackgroundPath = "none",
                             Description = "Attack on Titan is a Japanese manga series written and illustrated by Hajime Isayama. It depicts a world where humanity resides within enormous walled cities to protect themselves from the Titans, gigantic humanoid creatures.",
                             PicturePath = "/images/attack_on_titan.jpg",
-                            Rating = 0f,
+                            Rating = 0.0,
                             ReleaseDate = new DateOnly(2013, 4, 7),
                             Title = "Attack on Titan"
                         },
@@ -388,7 +390,7 @@ namespace Zanime.Server.Migrations
                             BackgroundPath = "none",
                             Description = "My Hero Academia is a Japanese superhero manga series written and illustrated by Kōhei Horikoshi. It follows the story of Izuku Midoriya, a boy born without superpowers in a world where they are the norm, but who still dreams of becoming a superhero himself.",
                             PicturePath = "/images/my_hero_academia.jpg",
-                            Rating = 0f,
+                            Rating = 0.0,
                             ReleaseDate = new DateOnly(2016, 4, 3),
                             Title = "My Hero Academia"
                         });
@@ -433,7 +435,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Characters");
+                    b.ToTable("Characters", "anm");
 
                     b.HasData(
                         new
@@ -488,7 +490,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", "anm");
 
                     b.HasData(
                         new
@@ -526,7 +528,7 @@ namespace Zanime.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", "anm");
 
                     b.HasData(
                         new
@@ -553,7 +555,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("CharacterID");
 
-                    b.ToTable("ActorCharacters");
+                    b.ToTable("ActorCharacters", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeActor", b =>
@@ -568,7 +570,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimeActors");
+                    b.ToTable("AnimeActors", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeCharacter", b =>
@@ -583,7 +585,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimeCharacters");
+                    b.ToTable("AnimeCharacters", "anr");
                 });
 
             modelBuilder.Entity("Zanime.Server.Models.Main.Relationships.AnimeGenre", b =>
@@ -598,7 +600,7 @@ namespace Zanime.Server.Migrations
 
                     b.HasIndex("AnimeID");
 
-                    b.ToTable("AnimeGenres");
+                    b.ToTable("ActorGenres", "anr");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

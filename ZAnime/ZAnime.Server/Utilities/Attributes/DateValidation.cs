@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zanime.Server.Models.Main.DTO.Anime_Model;
 
-namespace Zanime.Server.Models.Main.Attributes
+namespace Zanime.Server.Utilities.Attributes
 {
     public class DateValidationAnime : ValidationAttribute
     {

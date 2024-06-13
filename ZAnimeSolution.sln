@@ -7,6 +7,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ZAnime.Client", "ZAnime\zan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zanime.Server", "ZAnime\ZAnime.Server\Zanime.Server.csproj", "{DC383BC1-E2CF-415A-A378-072B5B47A895}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{C1C7E269-9E66-4D58-AF2C-7145A954BFC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC383BC1-E2CF-415A-A378-072B5B47A895}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1C7E269-9E66-4D58-AF2C-7145A954BFC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1C7E269-9E66-4D58-AF2C-7145A954BFC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1C7E269-9E66-4D58-AF2C-7145A954BFC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1C7E269-9E66-4D58-AF2C-7145A954BFC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Zanime.Server.Models.Main.Attributes;
+using Zanime.Server.Utilities.Attributes;
 
 namespace Zanime.Server.Models.Main.DTO.Character_Model
 {
@@ -17,6 +17,7 @@ namespace Zanime.Server.Models.Main.DTO.Character_Model
         public string Gender { get; set; }
 
         [Required(ErrorMessage = "PicturePath is required")]
+        [PathValidation<CharacterVM>]
         public string PicturePath { get; set; }
 
         [Required(ErrorMessage = "Bio is required")]

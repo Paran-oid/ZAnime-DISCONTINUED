@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zanime.Server.Models.Main.Relationships;
-using Zanime.Server.Models.Main.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
+using Zanime.Server.Utilities.Attributes;
 
 namespace Zanime.Server.Models.Main
 {
@@ -23,6 +23,7 @@ namespace Zanime.Server.Models.Main
         public string Gender { get; set; }
 
         [Required(ErrorMessage = "PicturePath is required")]
+        [PathValidation<Actor>]
         public string PicturePath { get; set; }
 
         [Required(ErrorMessage = "Bio is required")]
