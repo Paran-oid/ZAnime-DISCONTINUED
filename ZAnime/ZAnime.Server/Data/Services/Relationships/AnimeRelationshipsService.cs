@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data.Services.Interfaces.Relationships;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Actor_Model;
@@ -12,10 +13,14 @@ namespace Zanime.Server.Data.Services.Relationships
     public class AnimeRelationshipsService : IAnimeRelationshipsService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AnimeRelationshipsService(ApplicationDbContext context)
+        public AnimeRelationshipsService(
+            ApplicationDbContext context,
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<AnimeActor> GetRelationshipActor(int animeID, int actorID)
@@ -47,14 +52,7 @@ namespace Zanime.Server.Data.Services.Relationships
             var actors = await _context.AnimeActors
                 .Include(aa => aa.Actor)
                 .Where(aa => aa.AnimeID == animeID)
-                .Select(aa => new ActorVM
-                {
-                    Name = aa.Actor.Name,
-                    Age = aa.Actor.Age,
-                    Bio = aa.Actor.Bio,
-                    Gender = aa.Actor.Gender,
-                    PicturePath = aa.Actor.PicturePath
-                })
+                .Select(aa => _mapper.Map<ActorVM>(aa.Actor))
                 .ToListAsync();
 
             return (actors);
@@ -65,14 +63,7 @@ namespace Zanime.Server.Data.Services.Relationships
             var characters = await _context.AnimeCharacters
                 .Include(aa => aa.Character)
                 .Where(aa => aa.AnimeID == animeID)
-                .Select(aa => new CharacterVM
-                {
-                    Name = aa.Character.Name,
-                    Age = aa.Character.Age,
-                    Bio = aa.Character.Bio,
-                    Gender = aa.Character.Gender,
-                    PicturePath = aa.Character.PicturePath
-                })
+                .Select(aa => _mapper.Map<CharacterVM>(aa.Character))
                 .ToListAsync();
 
             return (characters);
@@ -94,14 +85,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> CreateActorToAnime(ActorVM model, int animeID)
         {
-            var actor = new Actor
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-            };
+            var actor = _mapper.Map<Actor>(model);
 
             await _context.Actors.AddAsync(actor);
             await _context.SaveChangesAsync();
@@ -122,14 +106,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> CreateCharacterToAnime(CharacterVM model, int animeID)
         {
-            var character = new Character
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio
-            };
+            var character = _mapper.Map<Character>(model);
 
             await _context.Characters.AddAsync(character);
             await _context.SaveChangesAsync();

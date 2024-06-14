@@ -113,7 +113,7 @@ namespace Zanime.Server.Controllers
                 return NotFound("No anime was found");
             }
 
-            var response = await _animeService.Delete(animeID);
+            var response = await _animeService.Delete(anime);
 
             return Ok(response);
         }

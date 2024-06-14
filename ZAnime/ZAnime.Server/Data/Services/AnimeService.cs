@@ -15,7 +15,7 @@ namespace Zanime.Server.Data.Services
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
 
-        public AnimeService(ApplicationDbContext context
+        public AnimeService(ApplicationDbContext context,
             IMapper mapper,
             ICacheService cacheService)
         {
@@ -108,6 +108,8 @@ namespace Zanime.Server.Data.Services
             key = $"anime {data.Title}";
             _cacheService.SetData(key, data, expire);
 
+            _cacheService.RemoveData("GetAllAnimes");
+
             return (data);
         }
 
@@ -117,13 +119,8 @@ namespace Zanime.Server.Data.Services
 
             string key;
             DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
-            key = $"anime{animeID}";
-            _cacheService.RemoveData(key);
 
-            key = $"anime {animeID}";
-            _cacheService.RemoveData(key);
-
-            _mapper.Map<Anime>(model);
+            _mapper.Map(model, data);
             await _context.SaveChangesAsync();
 
             key = $"anime{animeID}";
@@ -132,11 +129,14 @@ namespace Zanime.Server.Data.Services
             key = $"anime {data.Title}";
             _cacheService.SetData(key, data, expire);
 
+            _cacheService.RemoveData("GetAllAnimes");
+
             return (data);
         }
 
         public async Task<Anime> AddEndDate(int animeID, DateOnly date)
         {
+            string key;
             var data = await GetID(animeID);
 
             data.EndDate = date;
@@ -146,18 +146,30 @@ namespace Zanime.Server.Data.Services
 
             DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
 
-            string key = $"anime{animeID}";
-            _cacheService.SetData(key, data, expire)
+            key = $"anime{animeID}";
+            _cacheService.SetData(key, data, expire);
 
-            return (anime);
+            key = $"anime {data.Title}";
+            _cacheService.SetData(key, data, expire);
+
+            _cacheService.RemoveData("GetAllAnimes");
+
+            return (data);
         }
 
-        public async Task<string> Delete(int animeID)
+        public async Task<string> Delete(Anime model)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == animeID);
-
-            _context.Animes.Remove(anime);
+            _context.Animes.Remove(model);
             await _context.SaveChangesAsync();
+
+            string key;
+            key = $"anime {model.Title}";
+            _cacheService.RemoveData(key);
+
+            key = $"anime{model.ID}";
+            _cacheService.RemoveData(key);
+
+            _cacheService.RemoveData("GetAllAnimes");
 
             return ("Record deleted");
         }

@@ -50,7 +50,8 @@ namespace Zanime.Server.Migrations
                     ReleaseDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: true),
                     PicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BackgroundPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false)
                 },

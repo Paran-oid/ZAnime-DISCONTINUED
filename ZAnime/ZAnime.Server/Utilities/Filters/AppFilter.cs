@@ -6,12 +6,12 @@ namespace Zanime.Server.Utilities.Filters
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            Console.WriteLine("App is executing");
+            Console.WriteLine($" EXECUTING \n {context.ActionDescriptor.DisplayName}");
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Console.WriteLine("API ready!");
+            Console.WriteLine($"{context.ActionDescriptor.DisplayName} \n EXECUTED");
         }
     }
 }

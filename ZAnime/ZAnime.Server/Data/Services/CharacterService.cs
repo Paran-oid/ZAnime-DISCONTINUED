@@ -91,6 +91,8 @@ namespace Zanime.Server.Data.Services
             key = $"character {character.Name}";
             _cacheService.SetData(key, character, expire);
 
+            _cacheService.RemoveData("GetAllCharacters");
+
             return (character);
         }
 
@@ -99,20 +101,16 @@ namespace Zanime.Server.Data.Services
             var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == characterID);
             string key;
 
-            key = $"character{character.ID}";
-            _cacheService.RemoveData(key);
-
-            key = $"character {character.Name}";
-            _cacheService.RemoveData(key);
-
             DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
-            character = _mapper.Map<Character>(model);
+            character = _mapper.Map(model, character);
 
             key = $"character{character.ID}";
             _cacheService.SetData(key, character, expire);
 
             key = $"character {character.Name}";
             _cacheService.SetData(key, character, expire);
+
+            _cacheService.RemoveData("GetAllCharacters");
 
             await _context.SaveChangesAsync();
 
@@ -122,6 +120,8 @@ namespace Zanime.Server.Data.Services
         public async Task<string> Delete(Character model)
         {
             _context.Characters.Remove(model);
+            await _context.SaveChangesAsync();
+
             string key;
 
             key = $"character {model.Name}";
@@ -130,7 +130,7 @@ namespace Zanime.Server.Data.Services
             key = $"character{model.ID}";
             _cacheService.RemoveData(key);
 
-            await _context.SaveChangesAsync();
+            _cacheService.RemoveData("GetAllCharacters");
 
             return ("Record Deleted");
         }

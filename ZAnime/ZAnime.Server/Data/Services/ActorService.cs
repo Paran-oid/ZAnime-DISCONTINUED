@@ -35,7 +35,9 @@ namespace Zanime.Server.Data.Services
             {
                 DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
                 data = await _context.Actors.ToListAsync();
+
                 _cacheService.SetData(key, data, expire);
+
                 return (data);
             }
 
@@ -92,6 +94,8 @@ namespace Zanime.Server.Data.Services
             key = $"actor {actor.Name}";
             _cacheService.SetData(key, actor, expire);
 
+            _cacheService.RemoveData("GetAllActors");
+
             return (actor);
         }
 
@@ -100,14 +104,8 @@ namespace Zanime.Server.Data.Services
             var actor = await _context.Actors.FirstOrDefaultAsync(c => c.ID == ActorID);
             string key;
 
-            key = $"actor{actor.ID}";
-            _cacheService.RemoveData(key);
-
-            key = $"actor {actor.Name}";
-            _cacheService.RemoveData(key);
-
             DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
-            actor = _mapper.Map<Actor>(model);
+            actor = _mapper.Map(model, actor);
 
             key = $"actor{actor.ID}";
             _cacheService.SetData(key, actor, expire);
@@ -115,14 +113,18 @@ namespace Zanime.Server.Data.Services
             key = $"actor {actor.Name}";
             _cacheService.SetData(key, actor, expire);
 
-            await _context.SaveChangesAsync();
+            _cacheService.RemoveData("GetAllActors");
 
+            _context.Update(actor);
+            await _context.SaveChangesAsync();
             return (actor);
         }
 
         public async Task<string> Delete(Actor model)
         {
             _context.Actors.Remove(model);
+            await _context.SaveChangesAsync();
+
             string key;
 
             key = $"actor {model.Name}";
@@ -131,7 +133,7 @@ namespace Zanime.Server.Data.Services
             key = $"actor{model.ID}";
             _cacheService.RemoveData(key);
 
-            await _context.SaveChangesAsync();
+            _cacheService.RemoveData("GetAllActors");
 
             return ("Record Deleted");
         }

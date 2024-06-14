@@ -20,7 +20,7 @@ namespace Zanime.Server.Data.Services.Interfaces
 
         public Task<Anime> AddEndDate(int animeID, DateOnly date);
 
-        public Task<string> Delete(int animeID);
+        public Task<string> Delete(Anime model);
 
         Task SaveChanges();
     }

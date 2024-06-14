@@ -13,9 +13,11 @@ namespace Zanime.Server.Utilities.AutoMapper
         {
             //ACTOR
             CreateMap<ActorVM, Actor>();
+            CreateMap<Actor, ActorVM>();
 
             //CHARACTER
             CreateMap<CharacterVM, Character>();
+            CreateMap<Character, CharacterVM>();
 
             //ANIME
             CreateMap<AnimeVM, Anime>();

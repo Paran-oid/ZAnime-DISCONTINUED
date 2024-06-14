@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data.Services.Interfaces;
 using Zanime.Server.Models.Main;
@@ -12,15 +13,21 @@ namespace Zanime.Server.Data.Services.Relationships
     {
         private readonly ApplicationDbContext _context;
 
-        public ActorRelationshipsService(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+
+        public ActorRelationshipsService(
+            ApplicationDbContext context,
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ActorCharacter> GetActorCharacter(int actorID, int characterID)
         {
-            var relationship = await _context.ActorCharacters.FirstOrDefaultAsync(ac => ac.ActorID == actorID
-                                                                      && ac.CharacterID == characterID);
+            var relationship = await _context.ActorCharacters
+                .FirstOrDefaultAsync(ac => ac.ActorID == actorID
+                && ac.CharacterID == characterID);
 
             return (relationship);
         }
@@ -50,14 +57,7 @@ namespace Zanime.Server.Data.Services.Relationships
             var characters = await _context.ActorCharacters
                             .Include(c => c.Character)
                             .Where(ac => ac.ActorID == actorID)
-                            .Select(ac => new CharacterVM
-                            {
-                                Name = ac.Character.Name,
-                                Age = ac.Character.Age,
-                                Bio = ac.Character.Bio,
-                                Gender = ac.Character.Gender,
-                                PicturePath = ac.Character.PicturePath
-                            })
+                            .Select(c => _mapper.Map<CharacterVM>(c))
                             .ToListAsync();
 
             return (characters);
@@ -68,14 +68,7 @@ namespace Zanime.Server.Data.Services.Relationships
             var actors = await _context.ActorCharacters
                              .Include(c => c.Actor)
                              .Where(ac => ac.CharacterID == characterID)
-                             .Select(ac => new ActorVM
-                             {
-                                 Name = ac.Actor.Name,
-                                 Age = ac.Actor.Age,
-                                 Bio = ac.Actor.Bio,
-                                 Gender = ac.Actor.Gender,
-                                 PicturePath = ac.Actor.PicturePath
-                             })
+                             .Select(c => _mapper.Map<ActorVM>(c))
                          .ToListAsync();
 
             return (actors);
@@ -83,16 +76,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> CreateActorToCharacter(Character character, ActorVM model)
         {
-            Actor actor = new Actor
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
+            var actor = _mapper.Map<Actor>(model);
 
             await _context.Actors.AddAsync(actor);
             //This is important so we can get the ID
@@ -115,16 +99,7 @@ namespace Zanime.Server.Data.Services.Relationships
 
         public async Task<string> CreateCharacterToActor(Actor actor, CharacterVM model)
         {
-            Character character = new Character
-            {
-                Name = model.Name,
-                Age = model.Age,
-                Gender = model.Gender,
-                PicturePath = model.PicturePath,
-                Bio = model.Bio,
-                Likes = 0,
-                Dislikes = 0,
-            };
+            var character = _mapper.Map<Character>(model);
 
             await _context.Characters.AddAsync(character);
             //This is important so we can get the ID
