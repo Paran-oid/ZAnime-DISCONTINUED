@@ -4,7 +4,9 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using Zanime.Server.Data;
 using Zanime.Server.Data.Services;
+using Zanime.Server.Data.Services.AppRelated;
 using Zanime.Server.Data.Services.Interfaces;
+using Zanime.Server.Data.Services.Interfaces.AppRelated;
 using Zanime.Server.Data.Services.Interfaces.Relationships;
 using Zanime.Server.Data.Services.Relationships;
 using Zanime.Server.Models.Core;
@@ -44,16 +46,15 @@ builder.Services.AddCors(options =>
         });
 });
 
-//We add authorization
-//Then we add identityAPIEndpoints
-//Then we map the api to our user model (ITS DOWN THERE IN app.MapIdentityApi)
+//Authorization
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-//builder.Services.AddControllers().AddJsonOptions(x =>
-//   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
-//APP SERVICES
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// =====> APP SERVICES
 builder.Services.AddScoped<IActorService, ActorService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
@@ -63,6 +64,9 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 // =====> APP SERVICES RELATIONSHIPS
 builder.Services.AddScoped<IActorRelationshipsService, ActorRelationshipsService>();
 builder.Services.AddScoped<IAnimeRelationshipsService, AnimeRelationshipsService>();
+
+// =====> OTHER APP RELATED SERVICES
+builder.Services.AddScoped<ICacheService, CacheService>();
 
 var app = builder.Build();
 

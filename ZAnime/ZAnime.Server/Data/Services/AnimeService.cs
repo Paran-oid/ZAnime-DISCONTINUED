@@ -1,112 +1,153 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Zanime.Server.Data.Services.Interfaces;
+using Zanime.Server.Data.Services.Interfaces.AppRelated;
 using Zanime.Server.Models.Main;
 using Zanime.Server.Models.Main.DTO.Anime_Model;
 using Zanime.Server.Models.Main.DTO.Comment_Model;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Zanime.Server.Data.Services
 {
     public class AnimeService : IAnimeService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
 
-        public AnimeService(ApplicationDbContext context)
+        public AnimeService(ApplicationDbContext context
+            IMapper mapper,
+            ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<AnimeVM>> GetAll()
         {
-            var animes = await _context.Animes
-                .Select(a => new AnimeVM
-                {
-                    Title = a.Title,
-                    BackgroundPath = a.BackgroundPath,
-                    Description = a.Description,
-                    EndDate = a.EndDate,
-                    PicturePath = a.PicturePath,
-                    Rating = a.Rating,
-                    ReleaseDate = a.ReleaseDate
-                })
-                .ToListAsync();
-            return (animes);
+            string key = "GetAllAnimes";
+            var data = _cacheService.GetData<IEnumerable<AnimeVM>>(key);
+
+            if (data == null)
+            {
+                DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+
+                var newData = await _context.Animes
+                    .Select(anime => _mapper.Map<AnimeVM>(anime))
+                    .ToListAsync();
+
+                _cacheService.SetData(key, newData, expire);
+                return (newData);
+            }
+            return (data);
         }
 
         public async Task<Anime> GetID(int animeID)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == animeID);
+            string key = $"anime{animeID}";
+            var data = _cacheService.GetData<Anime>(key);
 
-            return (anime);
+            if (data == null)
+            {
+                DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+                data = await _context.Animes.FirstOrDefaultAsync(a => a.ID == animeID);
+                _cacheService.SetData(key, data, expire);
+                return (data);
+            }
+            return (data);
         }
 
         public async Task<Anime> GetbyTitle(string title)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.Title == title);
+            string key = $"anime {title}";
+            var data = _cacheService.GetData<Anime>(key);
 
-            return (anime);
+            if (data == null)
+            {
+                DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+                data = await _context.Animes.FirstOrDefaultAsync(a => a.Title == title);
+                _cacheService.SetData(key, data, expire);
+                return (data);
+            }
+            return (data);
         }
 
         public async Task<IEnumerable<CommentAnimeVM>> GetComments(int animeID)
         {
-            var comments = await _context.Comments
-                .Where(c => c.AnimeID == animeID)
-                .Select(c => new CommentAnimeVM
-                {
-                    Username = c.User.UserName,
-                    Content = c.Content,
-                    Likes = c.Likes
-                })
-                .ToListAsync();
+            string key = $"anime{animeID} comments";
+            var data = _cacheService.GetData<IEnumerable<CommentAnimeVM>>(key);
 
-            return (comments);
+            if (data == null)
+            {
+                DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+                var newData = await _context.Comments
+                    .Where(c => c.AnimeID == animeID)
+                    .Select(c => _mapper.Map<CommentAnimeVM>(c))
+                    .ToListAsync();
+                _cacheService.SetData(key, newData, expire);
+                return (newData);
+            }
+
+            return (data);
         }
 
         public async Task<Anime> Post(AnimeVM model)
         {
-            Anime anime = new Anime
-            {
-                Title = model.Title,
-                ReleaseDate = model.ReleaseDate,
-                EndDate = model.EndDate,
-                PicturePath = model.PicturePath,
-                BackgroundPath = model.BackgroundPath,
-                Description = model.Description,
-                Rating = model.Rating
-            };
+            string key;
+            var data = _mapper.Map<Anime>(model);
 
-            await _context.Animes.AddAsync(anime);
+            await _context.Animes.AddAsync(data);
             await _context.SaveChangesAsync();
 
-            return (anime);
+            DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+
+            key = $"anime{data.ID}";
+            _cacheService.SetData(key, data, expire);
+
+            key = $"anime {data.Title}";
+            _cacheService.SetData(key, data, expire);
+
+            return (data);
         }
 
         public async Task<Anime> Put(int animeID, AnimeVM model)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(c => c.ID == animeID);
+            var data = await _context.Animes.FirstOrDefaultAsync(c => c.ID == animeID);
 
-            anime.Title = model.Title;
-            anime.ReleaseDate = model.ReleaseDate;
-            anime.EndDate = model.EndDate;
-            anime.PicturePath = model.PicturePath;
-            anime.BackgroundPath = model.BackgroundPath;
-            anime.Description = model.Description;
-            anime.Rating = model.Rating;
+            string key;
+            DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+            key = $"anime{animeID}";
+            _cacheService.RemoveData(key);
 
-            _context.Animes.Update(anime);
+            key = $"anime {animeID}";
+            _cacheService.RemoveData(key);
+
+            _mapper.Map<Anime>(model);
             await _context.SaveChangesAsync();
 
-            return (anime);
+            key = $"anime{animeID}";
+            _cacheService.SetData(key, data, expire);
+
+            key = $"anime {data.Title}";
+            _cacheService.SetData(key, data, expire);
+
+            return (data);
         }
 
         public async Task<Anime> AddEndDate(int animeID, DateOnly date)
         {
-            var anime = await _context.Animes.FirstOrDefaultAsync(a => a.ID == animeID);
+            var data = await GetID(animeID);
 
-            anime.EndDate = date;
+            data.EndDate = date;
 
-            _context.Animes.Update(anime);
-
+            _context.Animes.Update(data);
             await _context.SaveChangesAsync();
+
+            DateTimeOffset expire = DateTimeOffset.Now.AddMinutes(5);
+
+            string key = $"anime{animeID}";
+            _cacheService.SetData(key, data, expire)
 
             return (anime);
         }
